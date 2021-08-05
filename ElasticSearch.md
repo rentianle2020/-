@@ -344,5 +344,91 @@ GET index/book/_search
 		"match_all":{}
 	}
 }
+#查询所有并排序+分页
+GET index/book/_search
+{
+  "query":{
+    "match_all":{}
+  },
+  "size":"1",
+  "from":"0",
+  "sort":[
+    {
+      "price":{
+        "order":"desc"
+      }
+    }]
+}
+#返回指定字段 _source
+GET index/book/_search
+{
+  "query":{
+    "match_all":{}
+  },
+  "_source":["name","price"]
+}
 ```
+
+**返回值**
+
+```apl
+{
+  "took" : 1, #毫秒值
+  "timed_out" : false, #是否超时
+  "_shards" : { #分片（集群相关）
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : { #本次查询击中的结果对象
+    "total" : 2, #击中数量
+    "max_score" : 1.0, #最大得分（相关度）
+    "hits" : [
+      {
+        "_index" : "index",
+        "_type" : "book",
+        "_id" : "2",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : 2,
+          "name" : "updatebook",
+          "price" : 100,
+          "des" : "this is a good book",
+          "pubdate" : "1998-10-28"
+        }
+      },
+```
+
+**term查询，基于关键词进行查询**
+
+```apl
+GET /index/book/_search
+{
+	"query":{
+		"term":{
+			"des":{
+				"value":"good"
+			}
+		}
+	}
+}
+```
+
+1. type：只有text类型参与分词，其他类型都不分词
+2. ES中默认使用标准分词器（StandardAnalyzer），对于中文单字分词，英文单词分词
+
+
+
+# ES原理
+
+向索引中插入文档，先完整存入元数据区，然后给该文档生成唯一标识。
+
+根据类型的映射，对类型的值做分词
+
+name:[张:0:1,张:1:1] --> name类型的”张“，在0号文档，出现1次；张在1号文档又出现了1次
+
+![image-20210805165617352](ElasticSearch.assets/image-20210805165617352.png)
+
+![](C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210805165242426.png)
 
