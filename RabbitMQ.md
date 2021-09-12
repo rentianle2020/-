@@ -1,6 +1,6 @@
 # RabbitMQ
 
-MQ：消息队列（Message Queue），也称为消息中间件
+RabbitMQ is a message broker: it accepts and forwards messages. 
 
 **生产者**不断向消息队列生产消息，消息排列在**消息队列**中，**消费者**从消息队列中获取消息
 
@@ -8,267 +8,378 @@ MQ：消息队列（Message Queue），也称为消息中间件
 
 
 
-### 不同的MQ特点
+**特点**
 
-1. ActiveMQ
+- 异步通信
+- 分布式
+- 管理&监控
 
-   Apache老牌产品，丰富的API，多种集群架构模式；性能受限，可以满足需求小型企业小吞吐量
 
-2. Kafka（效率高，数据一致性低）
 
-   Apache顶级项目，追求高吞吐量，一开始的目的是用于日志的收集和传输。不支持事务，对消息丢失、重复、错误没有严格要求。适合大量数据收集业务
+## Docker
 
-3. RocketMQ
+docker pull 一个带management的版本，设置账号密码
 
-   阿里巴巴开源，纯Java开发；高吞吐量，高可用性，思路源于Kafka，但是对事务做了优化；在阿里巴巴集团广泛用于交易、充值、流计算、消息推送、日志处理、binglog分发等场景。
+docker run -d --hostname my-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:management
 
-4. RabbitMQ
+```bash
+rabbitmqctl add_user mhlevel mhlevel  #添加用户，后面两个参数分别是用户名和密码
+rabbitmqctl set_permissions -p / mhlevel ".*" ".*" ".*"  #添加权限
+rabbitmqctl set_user_tags mhlevel administrator #修改用户角色
+```
 
-   基于AMQP网络协议，Erlang语言开发，与Spring框架无缝整合；对数据一致性，稳定性和可靠性要求很高，对性能和吞吐量的要求在其次
 
-   
 
-### RabbitMQ引言
+## 协议
 
-AMQP（advanced message queuing protocol）在2003年被提出，是一种链接协议。
+RabbitMQ支持各种通信协议，包括STOMP、MQTT、AMQP
 
-不是从API进行限定，而是直接定义网络交换的数据格式
 
 
+#### AMQP
 
-**安装**
+AMQP  creates full functional interoperability between conforming clients and messaging middleware 
+servers (also called "brokers")
 
-1. 官网下载erlang和rabbitmq的rpm安装包，并解压rpm -ivh xxx
 
-2. 命令行输入rabbitmq-plugins enable rabbitmq_management，启用web管理界面插件
 
-3. 启动服务 systemctl start rabbitmq-server
+**The Advanced Message Queuing Model (AMQ model)**
 
-4. 添加一个管理员用户
+AMQ模型是一个逻辑框架，由3个关键组件组成。（和邮箱服务器逻辑类似）
 
-   rabbitmqctl add_user tyler 1028
+三大关键组件：exchange，message queue，binding
 
-   rabbitmqctl set_user_tags tyler administrator
+exchange负责根据指定的binding规则，将消息路由到各个message queue
 
-   rabbitmqctl list_users
 
-5. 远程登录，管理rabbitmq
 
+**The Advanced Message Queuing Protocol (AMQP)**
 
+AMQP 0-9-1 (Advanced Message Queuing Protocol) is a messaging protocol that enables conforming client applications to communicate with conforming messaging middleware brokers.
 
-### RabbitMQ管理界面
+AMQP是一个消息协议，让客户端应用可以按照规则与消息中间件进行通讯，改变AMQ模型的状态（设置交换机，消息队列，绑定...）
 
-rabbitmqctl：在不使用web管理界面的情况下操作RabbitMQ
 
-rabbitmq-plugins：插件管理
 
+**AMQP 0-9-1 Model Explained**
 
+交换机：默认交换机，创建队列时，默认绑定和队列名相同的routing key；其他的该啥样啥样
 
-- `connections`：无论生产者还是消费者，都需要与 RabbitMQ 建立连接后才可以完成消息的生产和消费，在这里可以查看连接情况
-- `channels`：**通道**，建立连接后，会形成通道，消息的投递获取依赖的通道
-- `Exchanges`：**交换机**，用来实现消息的路由
-- `Queues`：**队列**，就是消息队列，消息存放在队列中，等待消费，消费后会被移除队列
+队列：属性Name、Durable、Exclusive、Auto-delete、Arguments
 
+Bindings：交换机用来路由信息到队列的规则
 
+消费者：两种方法消费信息，订阅队列&轮询队列，轮询效率极低应该避免使用
 
-在服务器中，构建虚拟主机；用户通过账号密码链接虚拟主机，生产正通过通道向交换机中写入生产消息，交换机路由，找到指定的队列；当然生产者也可以直接将消息写入队列；最终，消费者从队列中获取消息；消息模型有很多种！
+消息确认：消费者可以选择两种确认方法，自动确认&手动确认，第二种情况下，如果没收到手动确认，RabbitMQ会将消息推送给下一个消费者来处理（如果一个没有，就等一个新连接）
 
+Rejecting Messages 退回消息：消费者可以在收到消息后，如果不能正确处理，可以退回消息并选择让RabbitMQ扔掉或重新分配给别人。（如果只有一个消费者订阅队列，就不要退回再requeue！会形成无限循环）
 
+Negative Acknowledgements：RabbitMQ给多信息退回提供了解决方案
 
-### 消息模型
+Prefetching Messages 预取消息：设定再下一个ack之前，可以向每个消费者发送多少条消息；RabbitMQ只支持channel级别的prefetch-count，不支持基于连接或者消息大小的。
 
-channel.queueDeclare(String queue，Boolean duration，Boolean exclusive，Boolean autoDelete）
 
-- 将通道和队列绑定
-- 持久化的队列在RabbitMQ服务重启后，依然保留，队列中消息的持久化不在这个属性中涉及
-- 队列是否被本次connection独占
-- 消息被消费完，并与消费者断开连接后，自动删除
 
-channel.baseicPublish(String exchange，String routingKey，BasicProperties props，byte[] body)
+连接：使用TCP实现可靠连接
 
-- 交换机
-- 路由key
-- 消息持久化等额外属性
-- 消息
+Channel：channels that can be thought of as "lightweight connections that share a single TCP connection". 可以看作是一个Application与MessageBroker会话，不同的Thread应该使用不同的会话！
 
-channel.basicConsume(String queue, Boolean autoAck, Consumer consumer)
+> A connection is a TCP connection between your application and the RabbitMQ broker. A channel is a virtual connection inside a connection. In other words, a channel multiplexes a TCP connection. Typically, each process only creates one TCP connection, and uses multiple channels in that connection for different threads. When you are publishing or consuming messages from a queue, it's all done over a channel.
 
-- 消费的队列
-- 自动确认机制：获取到数据后，自动向消息队列确认已经被消费，消息队列即刻删除该消息；如果取消自动确认，但是并未手动确认，消息会一直保存在队列中
 
-channel.basicQos(Integer prepetchCount)
 
-- 让通道每次放入1个消息，而不是一股脑的全部放入，防止消费者宕机
+## 消息队列
 
-channel.exchangeDeclare(String exchange, String type)
+消息队列收到内存和磁盘大小的限制，它的本质就是一个大的消息缓存。
 
-- 交换机名称
-- 交换机类型
+生产者可以向队列中发送消息，消费者可以从队列中接收消息。
 
 
 
-**Hello World！**
+#### **工作队列 Work Queues (aka: *Task Queues*)**
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210801225122193.png" alt="image-20210801225122193" style="zoom:67%;" />	
+多个Worker从同一个消息队列中获取消息，队列采用公平的轮询分配，每个人获得同样多的消息。
 
-问题：生产的快，消费的慢，导致消息队列的消息堆积
+适用于复杂的消息处理。
 
-解决方式：让多个消费者共同消费一个队列，队列中的消息被消费后即刻消失，不会被重复消费
 
 
+**公平分配**
 
-**任务模型 Work queues**
+RabbitMQ doesn't look at the number of unacknowledged messages for a consumer. It just blindly dispatches every n-th message to the n-th consumer.
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210801225101897.png" alt="image-20210801225101897" style="zoom:67%;" />	
+这个设定让RabbitMQ只会循环调度`Round-robin dispatching`，而不会按劳分配
 
-问题：
+设置basicQos，告诉RabbitMQ，如果消费者没有Ack前一个消息，就不要发给他下一个消息！
 
-RabbitMQ顺序的将每个消息发送给下一个消费者，每个消费者都会获取相同数量的消息。这种平均分发消息的方式也称为“循环”。
+```java
+int prefetchCount = 1;
+channel.basicQos(prefetchCount);
+```
 
-如果消息者1处理的快，而消费者2处理的慢，平均分配就会导致以最慢处理者为标准，拉低所有消费者的对这个队列的处理速度！
 
-循环是由RabbitMQ的自动确认机制导致的，
 
-解决方式：
+**可靠信息传递（publisher confirm & listener acknowledge）**
 
-设置服务器每次向通道中传入1个消息；关闭通道对消息的自动确认，在业务处理完一个消息后手动确认
+<img src="https://blog.rabbitmq.com/assets/images/2011/02/pubacks.svg" alt="img" style="zoom: 80%;" />	
 
-这样，每次服务器向通道中传入1个消息，消费者手动确认后，服务器会再传1个消息到通道；实现能者多劳
+如果消费者在进行消息处理时宕机，会导致消息丢失。为此，RabbitMQ设定了消息确认机制。
 
-> Spring AMQP实现Work模型使用的是公平调度，如果想要变成能者多劳需要额外配置
+消费者消费完后，发送Ack回来，RabbitMQ才会将该消息从队列中移除。
 
+若没有收到Ack，RabbitMQ认定消息丢失，转而将其重新发送给下一个消费者重新消费。
 
+Manual message acknowledgments are turned on by default. In previous examples we explicitly turned them off via the autoAck=true flag. It's time to set this flag to false and send a proper acknowledgment from the worker, once we're done with a task.
 
-**发布订阅模型 Publish/Subscribe**
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210801225036807.png" alt="image-20210801225036807" style="zoom:67%;" />	
 
-生产者不再直接连接队列，而是发送给交换机，由交换机决定发送给哪个队列
+**信息持久性 Message durability**
 
+When RabbitMQ quits or crashes it will forget the queues and messages unless you tell it not to. Two things are required to make sure that messages aren't lost: we need to mark both the queue and messages as durable.
 
+1. channel.queueDeclare()时，将durable设置为true
+2. channel.basicPublish()时，给BasicProperties设置为MessageProperties.PERSISTENT_TEXT_PLAIN
 
-使用广播（Fanout）类型的交换机
+ The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use [publisher confirms](https://rabbitmq.com/confirms.html).
 
-交换机可以把消息发送给所有绑定过的队列，所有绑定过这些队列的消费者都能拿到信息；实现发布一条消息，被多个消费者消费！
 
-由于每一个消费者可能都要有一个队列来绑定这个fanout交换机，所以每个消费者创建一个空的临时队列，断开连接后，这个队列会被自动删除
 
+#### **发布订阅 publish/subscribe**
 
+The core idea in the messaging model in RabbitMQ is that the producer never sends any messages directly to a queue. Actually, quite often the producer doesn't even know if a message will be delivered to any queue at all.
 
-**路由模型 Routing**
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210801224958702.png" alt="image-20210801224958702" style="zoom:67%;" />	
 
-相比fanout那种被所有订阅的队列消费，我们希望不同的消息被不同的队列消费
+**临时队列 Temporary queues**
 
+有了路由，我们不需要关心队列的名字（之前是生产者和队列点对点，所以需要知道）
 
+queueDeclare() to create a non-durable, exclusive, autodelete queue with a generated name:
 
-使用直连（Direct）类型的交换机
+```java
+String queueName = channel.queueDeclare().getQueue();
+```
 
-生产者向路由器发布消息时指定`RoutingKey`
+> exclusive：只被一个连接使用，这个连接断开时销毁队列
 
-消费者的临时队列绑定路由器时，也指定`RoutingKey`
 
-只有发布和接收时指定的`RoutingKey`相等时，消息参会被发送到队列中，然后被消费者消费
 
+**扇出交换机 exchange**
 
+![img](C:/Users/%E4%B9%90%E4%B9%90%E5%A4%A7%E5%93%A5%E5%93%A5/Desktop/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/assets/bindings.png)	
 
-**Topic**
+Instead, the producer can only send messages to an *exchange*. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives.
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802115456776.png" alt="image-20210802115456776" style="zoom:67%;" />	
+There are a few exchange types available: direct, topic, headers and fanout.
 
-`Topic`类型的交换机与`Direct`一样，都支持`RoutingKey`。只不过`Topic`允许队列再绑定`RoutingKey`的时候使用通配符！可以由多个单词组成，以“`.`”分割
+```java
+channel.exchangeDeclare("logs", "fanout");
+channel.queueBind(queueName, "logs", "");
+```
 
-`*`可以替代1个单词
 
-`#`可以代替零或多个单词
+
+**直接交换机 Direct exchange**
+
+交换机只将信息发送给与其routingkey完全相同的queue
+
+Bindings can take an extra routingKey parameter. To avoid the confusion with a basic_publish parameter we're going to call it a binding key. This is how we could create a binding with a key:
+
+```java
+channel.queueBind(queueName, EXCHANGE_NAME, "black");
+```
+
+
+
+**主题交换机 Topic exchange**
+
+在路由的基础上让交换机绑定更加灵活
+
+可以设置多个routingkey，中间用`.`分割，可以用`*`占位符代表1个单词，用`#`代表0或多个单词	
+
+比如生产者绑定routingkey：`tyler.handsome.guy`，消费者绑定routingkey：`tyler.#`或者`*.handsome.*`都可以接收到
+
+
+
+## 死信队列
+
+In certain situations, for example, when a message cannot be routed, messages may be *returned* to publishers, dropped, or, if the broker implements an extension, placed into a so-called "dead letter queue". Publishers choose how to handle situations like this by publishing messages using certain parameters.
+
+
+
+通过policy配置
+
+```bash
+rabbitmqctl set_policy DLX ".*" '{"dead-letter-exchange":"my-dlx"}' --apply-to queues
+```
+
+通过args配置
+
+```java
+channel.exchangeDeclare("some.exchange.name", "direct");
+
+Map<String, Object> args = new HashMap<String, Object>();
+args.put("x-dead-letter-exchange", "some.exchange.name");
+channel.queueDeclare("myqueue", false, false, false, args);
+```
 
 
 
 ### RabbitMQ整合Springboot
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802145958827.png" alt="image-20210802145958827" style="zoom:67%;" />	
-
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802150019664.png" alt="image-20210802150019664" style="zoom:67%;" />	
 
 
+**生产者**
 
-### MQ的应用场景
+publisher-confirm
 
-**异步处理**
+```yml
+publisher-returns: true
+publisher-confirm-type: correlated
+```
 
-业务场景：用户注册信息写入数据库后，需要同时发注册邮件和注册短信
+```java
+@Component
+public class PublisherListener {
 
-解决方案：
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
-1. 串行执行：响应客户端时间太长，没必要等待
+    @Bean
+    //生产者调用sendAndReceive()时，会等待回调这个方法；效率极低
+    public void setRabbitTemplate(){
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            System.out.println(correlationData);
+            System.out.println(ack);
+            System.out.println(cause);
+        });
+    }
+}
+```
 
-   <img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802160206593.png" alt="image-20210802160206593" style="zoom:67%;" />	
+正常发布消息，参数为exchange，routingKey，message
 
-2. 并行执行：多线程同时发送
+默认的SimpleMessageConverter只支持String, byte[] and Serializable payloads类型的message
 
-   <img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802160219163.png" alt="image-20210802160219163" style="zoom:67%;" />	
-
-3. 消息队列广播
-
-   <img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802160444602.png" alt="image-20210802160444602" style="zoom:67%;" />	
-
-**应用解耦**
-
-业务场景：用户下订单后，需要通知库存系统；换句话说，订单系统需要调用库存系统的接口；两个系统高度耦合，如果库存系统出现故障，则订单系统的可用性收到影响，无法第一时间返回
-
-解决方案：
-
-用户下订单 --> 订单系统完成持久化 --> 将消息写入队列并返回下单成功 --> 库存系统从消息队列中拉去消息，并执行对应的业务逻辑；两个系统互不影响
-
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802162441061.png" alt="image-20210802162441061" style="zoom:67%;" />	
-
-**流量削峰**
-
-业务场景：秒杀活动，流量过大导致秒杀系统被压垮
-
-解决方案：
-
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802162855918.png" alt="image-20210802162855918" style="zoom:67%;" />	
-
-服务器收到业务请求后将其写入消息队列，超过队列设置的阈值（最大长度），则直接抛弃请求并返回“秒杀失败”页面；秒杀业务按照自己的最大处理能力，从队列中获取消息并完成业务处理
+```java
+public void simplePublish(){
+    rabbitTemplate.convertAndSend("testEx","log.info","simpleMessage");
+    rabbitTemplate.convertAndSend("testEx","log.warn","warnMessage");
+}
+```
 
 
 
-### RabbitMQ的集群
+**消费者**
 
-**普通集群（副本集群）**
+listener acknowledge
 
-<img src="C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802181709978.png" alt="image-20210802181709978" style="zoom:80%;" />	
+```yml
+    listener:
+#      simple:
+#        acknowledge-mode: manual
+#        prefetch: 1
+#      simple & direct是一样的
+      direct:
+        acknowledge-mode: manual
+        prefetch: 1
+```
 
-从节点复制主节点中交换机的数据和状态；从节点可以看到主节点的消息队列（在web管理页面显示），但无法同步消息队列以及其中的数据。
+```java
+@RabbitListener(queues = "tyler")
+public void consumerOne(String message,Channel channel,@Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException{
+    System.out.println("consumerOne accepts " + message);
+    //返回nack，第一个参数是请求头里的一个参数，第二个参数是否要全部nack，第三个参数是否要requeue这些nack的消息
+    channel.basicNack(tag,false,true);
+    //channel.basicAck();
+}
+```
 
-如果主节点正常运行，消费者是可以向从节点消费消息的，从节点回去找主节点要对应的消息
+正常消费消息，默认autoAck，prefetch=250，@Queue生成临时队列，绑定交换机，设置routingKey
 
-一旦主节点宕机，从节点无法对外提供主节点消息队列中的消息！
-
-
-
-**镜像集群（高可用）**
-
-在普通集群之上，做二次配置，rabbitmqctl set_policy...
-
-高可用（减少系统不能提供服务的时间）+自动的故障转移（主节点宕机后，重新分配主节点）
-
-![image-20210802191543470](C:\Users\乐乐大哥哥\AppData\Roaming\Typora\typora-user-images\image-20210802191543470.png)
-
-
-
-### **其他**
-
-如果不指定交换机，生产者会将消息发布给AMQP default交换机；而每一个队列，无论后天绑定了哪个交换机，先天会默认绑定AMQP default交换机（无法解绑，这个交换机也无法被删除）；而这个交换机的匹配方式，是通过生产者的routingKey匹配队列的queue name
-
-这就解释了为什么在生产者不指定交换机时，消息会发送给名称为routingKey的队列。
-
-在RabbitMQ的web管理端中，点进AMQP default交换机，会看到他的介绍。
-The default exchange is implicitly bound to every queue, with a routing key equal to the queue name. It is not possible to explicitly bind to, or unbind from the default exchange. It also cannot be deleted.
+```java
+@RabbitListener(bindings = @QueueBinding(
+        value = @Queue,
+        exchange = @Exchange(type = "topic",name = "testEx"),
+        key = {"log.*"}
+))
+public void everyLog(String message){
+    log.info(message);
+}
+```
 
 
 
+### RabbitMQ集群
 
+
+
+**节点标识**
+
+在RabbitMQ中，节点使用节点名`node name`来标识。
+
+一个集群中的每个节点的名字必须是独一无二的，节点之间通过节点名来完成通讯。
+
+node name包括两个比分，前缀(通常为rabbit)和主机名(hostname)
+
+> 启动Docker的时候设置hostname，然后在/var/hosts文件中，将其他节点的hostname对应IP地址写进去。到时候join_cluster rabbit@hostname，就可以加入集群了
+
+
+
+**集群性质**
+
+所有RabbitMQ的节点都是同等地位的`equal peers`，不像大多数分布式系统，存在主从节点之说。
+
+
+
+两个节点想要通讯，必须有相同的密匙叫做`Erlang cookie`
+
+在3.9版本以前，都可以通过设置环境变量`RABBITMQ_ERLANG_COOKIE`的方式设置`/var/lib/rabbitmq/.erlang.cookie`下的密匙
+
+而3.9版本后，官方将环境变量废除，使用配置文件
+
+> 官方建议集群的节点数量为奇数，最少为3个节点
+
+
+
+**普通集群**
+
+https://cloud.tencent.com/developer/article/1496835
+
+By default, contents of a queue within a RabbitMQ cluster are located on a single node (the node on which the queue was declared). This is in contrast to exchanges and bindings, which can always be considered to be on all nodes.
+
+
+
+**镜像集群**
+
+rabbitmqctl set_policy --> 设置镜像policy
+
+可以指定镜像模式：
+
+- exactly：指定queue数量，1代表只有主节点1人存放queue
+- all：所有节点都镜像主节点的队列（官方不推荐，Mirroring to a quorum (N/2 + 1) of cluster nodes is recommended instead）
+- nodes：指定节点来镜像主节点的队列
+
+配置后完毕后，queue就会形成master和mirrors的主从复制关系（rabbit1的节点被2和3mirror，raabit2的节点被1和3mirror，节点之间依然是公平的equal peer关系）
+
+```bash
+rabbitmq-plugins enable rabbitmq_federation
+
+rabbitmqctl set_policy ha-nodes ".*" '{“ha-sync-mode":"automatic","ha-mode":"nodes","ha-params":["rabbit@rabbit1", "rabbit@rabbit2","rabbit@rabbit3"]}' --priority 1 --apply-to queues
+```
+
+
+
+在RabbitMQ管理网页上，可以看到queue采用的镜像policy
+
+<img src="https://rabbitmq.com/img/mirroring/queue_mirroring_indicators_management_ui_row_only.png" alt="Mirrored queue indicators in management UI" style="zoom:67%;" />	
+
+
+
+## Quorum queues
+
+Quorum queues should be the **default choice** for a replicated queue type. Classic queue mirroring will be **removed in a future version** of RabbitMQ: classic queues will remain a supported non-replicated queue type.
+
+The quorum queue is a modern queue type for RabbitMQ implementing a durable, replicated FIFO queue based on the [Raft consensus algorithm](https://raft.github.io/). It is available as of RabbitMQ 3.8.0.
 

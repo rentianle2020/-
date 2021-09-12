@@ -22,9 +22,28 @@ git checkout -b 分支：在当前分支的基础上，新建分支，并切换�
 
 git branch：查看本地分支，如果后边加上分支名，为新建分支
 
-
+```
+public int removeDuplicates(int[] nums) {
+        int slowIndex = 0;
+        for (int fastIndex = 1; fastIndex < nums.length; fastIndex++) {
+            if(nums[slowIndex] != nums[fastIndex]){
+                slowIndex++;
+                nums[slowIndex] = nums[fastIndex];
+            }
+        }
+        return slowIndex + 1;
+    }
+```
 
 git merge 分支：将指定分支合并到当前分支
+
+
+
+git remote add origin https://github.com/rentianle2020/test.git：关联远端仓库，**名为origin**
+
+git push -u origin master 相当于 git branch --set-upstream origin master + git push origin master 也相当于 git push --set-upstream origin master
+
+第一次push，将本地仓库master分支，绑定了origin远程仓库的master分支；此后只需简单git push即可
 
 
 
@@ -33,8 +52,6 @@ git merge 分支：将指定分支合并到当前分支
 1. 在远端建立新分支
 2. git fetch：获悉远端新的分支和新的更改
 3. git checkout 新分支：自动将远端分支同步到本地仓库
-
-
 
 或者在本地建立了新的分支想同步到远端
 
@@ -46,3 +63,9 @@ git merge 分支：将指定分支合并到当前分支
 
 
 git pull = git fetch当前分支的远端更新，git merge到当前分支
+
+
+
+**如果使用了VPN，导致SSL报错**
+
+git config --global http.sslVerify false
