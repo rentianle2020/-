@@ -206,7 +206,7 @@ But queries do not always need to produce scores, in particular when they are on
 
 **精确查询 Term-level queries**
 
-不会对搜索词进行此法分析，而是直接整个带着去倒排索引中匹配
+不会对搜索词进行词法分析，而是直接整个带着去倒排索引中匹配
 
 EX.如果我们存储包含"brown dog"值的text，倒排索引中存在"brown"和"dog"，当我们直接term搜索”brown dog“的时候，什么也搜不到。这是因为term搜索不会将我们的搜索分词，而是直接去倒排索引中完全匹配。
 
@@ -506,3 +506,8 @@ GET test/article/_search
 }
 ```
 
+
+
+JAVA API请查看官方文档，和我在Github上的demo
+
+https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high-search.html

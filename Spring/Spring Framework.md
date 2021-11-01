@@ -292,7 +292,7 @@ By Setter method
 
 - 依赖更明确
 
-- 灵活决定注入顺序，
+- 灵活决定注入顺序
 
 - 静态变量可以直接使用依赖（静态变量在构造方法后，在setter方法前被初始化）
 
@@ -312,9 +312,9 @@ cross-cutting concern 关注横切点
 
 
 
-# MVC
+# Spring MVC
 
-一种设计模式
+MVC是一种设计模式
 
 Request --> Controller --> Model --> View --> Response
 
@@ -324,11 +324,11 @@ SpringMVC框架让我们使用最少的代码，完成整个业务请求的处�
 
 <img src="https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225741.png" alt="mvc context hierarchy" style="zoom:67%;" />	
 
-`DispatcherServlet`：统一接收返回请求，实际处理委派给各个组件
+`DispatcherServlet`：基于Servlet，统一接收&返回请求，实际处理委派给各个组件
 
 WebApplicationContext是ApplicationContext的扩展，将各种web-related beans注入到容器中。
 
-DispatcherServlet使用这个容器，作为它自己的获取bean的池子（从WebApplicationContext中获取对应的bean来处理请求）
+DispatcherServlet使用这个容器，作为它自己的获取bean的容器（从WebApplicationContext中获取对应的bean来处理请求）
 
 > `DispatcherServlet` expects a `WebApplicationContext` (an extension of a plain `ApplicationContext`) for its own configuration. 
 

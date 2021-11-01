@@ -971,3 +971,4 @@ This is primarily because unlike **binary search trees**, **B+ trees** have very
 
 
 It's all about branching factor. Because of the way B+-Trees store records (called "satellite information") at the leaf level of the tree, they maximize the branching factor of the internal nodes. High branching factor allows for a tree of lower height. Lower tree height allows for less disk I/O. Less disk I/O theoretically means better performance.
+

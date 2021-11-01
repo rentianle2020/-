@@ -58,11 +58,11 @@ Predicates断言型接口，传入类型，返回布尔值，用于判断
 
 Functions函数式，传入一个值，返回一个值
 
-Suppliers生产者，只有一个get()方法，不需要任何参数，但是能返回相应的结果
+Suppliers生产者，不需要任何参数，但是能返回相应的结果
 
 Consumer消费者，给一个参数，然后把参数“消费”了，不给返回
 
-Comparators，比较式接口
+Comparators，比较式接口，传入两个值，返回布尔
 
 
 
