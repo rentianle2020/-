@@ -411,8 +411,6 @@ Java automatically inserts calls to the base-class **no-args-constructor** in th
 
 每次在使用Inheritance时，先问问自己是否会用到Upcasting？如果不需要，那可能多的使用Composition
 
-<img src="/Users/cencen/Desktop/截图/截屏2021-10-09 下午3.25.41.png" alt="截屏2021-10-09 下午3.25.41" style="zoom:50%;" />	
-
 
 
 **final**
@@ -767,7 +765,13 @@ map如果返回Stream.of(i,i+1,i+1)就真的是返回一个Stream对象
 
 **创建**
 
-.empty(), of(value) -->不是null的情况下, ofNullable(value) --> 可能是null的情况下
+.empty()
+
+of(value) -->不是null的情况下
+
+ofNullable(value) --> 可能是null的情况下
+
+
 
 **拆解**
 
@@ -830,15 +834,9 @@ https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.ht
 
 ## Files
 
- These new elements are packaged under java.nio.file,
+ These new elements are packaged under java.nio.file, where the n in nio formerly meant “new” but now means “non-blocking” (io is for *input/output*). 
 
-where the n in nio formerly meant “new” but now means “non-blocking” (io is for
-
-*input/output*). The java.nio.file library finally brings Java file manipulation into
-
-the same arena as other programming languages. On top of that, Java 8 adds streams
-
-to the mix, which makes file programming even nicer.
+The java.nio.file library finally brings Java file manipulation into the same arena as other programming languages. On top of that, Java 8 adds streams to the mix, which makes file programming even nicer.
 
 
 
@@ -939,7 +937,11 @@ InvocationHandler类包含一个target类，在invoke方法中通过反射来获
 
 **Class类**
 
-一个类对应一个Class文件，运行时被ClassLoader加载到JVM，包装成一个Class对象。当我们在new对象时，就是在调用Class对象的Constructor方法（虽然没有static修饰，构造方法也是一个静态方法）
+一个类对应一个Class对象，当我们首次调用一个类的静态方法时被载入JVM（虽然没有static修饰，构造方法也是一个静态方法）
+
+Each Class object is loaded by Classloader only when it’s needed
+
+Once the Class object for that type is in memory, it is used to create all objects of that type
 
 
 
@@ -953,12 +955,17 @@ InvocationHandler类包含一个target类，在invoke方法中通过反射来获
 
 获取Class对象的方法
 
-- Class.forName("") 运行时检查，需要处理异常
-- Class Literal --> Integer.class，编译时检查所以不用额外throw Exception，不触发Initialization
+- Class.forName("") ，运行时检查，需要处理异常
+- Integer.class，编译时检查所以不用额外throw Exception，不触发Initialization
+- xxx实例.getClass()
 
 
 
-给Class<>加泛型，限制可以赋值的Class类型
+Class.newInstance()方法，如今已经被Constructor.newInstance()代替
+
+
+
+给Class<>加泛型，用于编译时检查
 
 ```java
 //看似合法，因为Integer是Number的子类，然而Integer Class不是Number Class的子类。Integer可以向上转型为Number，但是两个Class类无法互相转换。
@@ -970,15 +977,27 @@ Class<? extends Number> genericIntClass = int.class;
 
 
 
-instanceof运行时检查类型，判断该类是否为某个类，或者某个类的实现/继承类
+可以用cast(Object o)方法强转参数对象为本类，useful for situations where you *can’t* use an ordinary cast
+
+实例 instanceof Class：运行时检查类型，判断该类是否为某个类，或者某个类的实现/继承类
+
+isAssignableFrom(Class c)，调用方法的类是否为参数类的本类或父类
 
 
 
 ## Generic
 
+用于给Tuple（DTO）一个/多个Type parameter，然后编译器干活！
+
+
+
+**泛型类**
+
 One of the most compelling initial motivations for generics is to create *container classes* 
 
-也可以在interface上使用<T>，实现类中指定类型，相当于一种Factory Method设计模式。(比如Iterator，并且SpringDataJpa应该就是这样子的)
+在类上指定泛型，相当于一种Factory Method设计模式。
+
+with generic class，必须在初始化（new或者继承）时指定泛型类型。
 
 ```java
 public interface GenericInterface<T> {
@@ -995,5 +1014,225 @@ public class GenericImpl implements GenericInterface<Integer>{
 
 
 
+**泛型方法**
+
+To define a generic method, place the generic parameter list before the return value
+
+这样就可以在方法参数/返回值上使用泛型了，看起来只是一个普通方法，但其实该方法已经被无限重载了！
+
+Arrays.asList(args...)就是用泛型完成方法重载的。
+
+@SafeVarargs会让编译器去检查方法内是否有对泛型参数不安全的操作，比如强转。
+
+```java
+public class Util {
+    public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2) {
+        return p1.getKey().equals(p2.getKey()) &&
+               p1.getValue().equals(p2.getValue());
+    }
+}
+
+public class Pair<K, V> {
+
+    private K key;
+    private V value;
+
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public void setKey(K key) { this.key = key; }
+    public void setValue(V value) { this.value = value; }
+    public K getKey()   { return key; }
+    public V getValue() { return value; }
+}
+
+boolean same = Util.<Integer, String>compare(p1, p2);
+```
+
+
+
+这不算Java的一个特性，而是一种**妥协**。经过编译擦除，类上的泛型消失，属性和方法上的泛型在没有指定extend/super限制的情况下转换为Object
+
+type annotations such as List<T> are erased to List, and ordinary type variables are erased to Object unless a bound is specified
+
+**Erasure enables this migration towards generics by allowing non-generic code to coexist with generic code**
+
+
+
+**泛型擦除**
+
+Class.getTypeParameters()只能得到泛型的占位符如T，K，V
+
+虽然List<Integer>和List<String>在编译前只能插入对应的类型元素，看起来不是一个类，但是在运行时被擦除，所以同属于List类。
+
+C++中，是可以直接在方法中调用泛型实例类的方法；但在Java中会报错，因为泛型擦除后，方法中的Object类找不到泛型实例的方法，除非指定的**type parameter是<T extends Integer>**,这种情况下就可以假设所有泛型实例都有实现Integer方法，就可以在方法体中把泛型参数当作Integer对象来调用方法了。因为擦除后不是转换为Object，而是Integer。
+
+
+
+因为泛型擦除，占位符T不能执行 xxx instanceof T，只能传到Class<T> kind属性中，使用kind.isInstance(xxx)来判断类型，还可以用此方法来new泛型对象
+
+
+
+Remember *PECS*: **"Producer Extends, Consumer Super"**.
+
+如果要生产一个生产Number的List，使用List<? Extends Number>，就算声明为<Integer>，也可以读出为Number
+
+如果需要一个可以消耗(存入)Integer的List，使用List<? super Integer>，就算声明为<Number>，也可以存入Integer
+
+既不读，也不写，可以使用<?>
+
+如果需要又读又写，就不要使用通配符了，直接在泛型中指定具体类型！
+
+
+
+**泛型存在的原因**
+
+作者认为，泛型并不像很多人说的，为了避免我们把猫对象放进狗集合中，这种错误不常见。
+
+
+
+声明泛型类和方法时，更加的generic泛泛，让一段代码可以起到多类型兼容的重载作用。
+
+使用带有泛型的类时，用清晰可见的泛型类声明，和避免转换的方式，更优雅的写代码。
+
+https://docs.oracle.com/javase/tutorial/java/generics/why.html
+
+
+
 ## Arrays
+
+Java provides reasonable support for fixed-sized, low-level arrays. This kind of array emphasizes performance over flexibility
+
+大部分情况我们都应该使用Collections，它具有面向对象，动态扩容等好处，自动装箱/拆箱 & 泛型也让其操作变得异常简单。
+
+除非性能受到了严重影响，可以考虑使用原始数组。
+
+
+
+Arrays.setAll(xxx[], index -> index)
+
+Arrays.fill()
+
+
+
+Arrays.parallelSetAll(), Arrays.parallelSort() 并行操作，什么时候使用？
+
+http://gee.cs.oswego.edu/dl/html/StreamParallelGuidance.html
+
+
+
+工具方法 Arrays Utilities，p1027
+
+
+
+## Enumerations
+
+枚举类是一个有限元素的类，使用enum关键字定义，编译器负责创建这个类，这个类自动继承java.lang.Enum类。
+
+自定义枚举类可以被implement，无法被inherit，可以照常添加方法
+
+
+
+**获取枚举类中的所有元素**
+
+test.values()：不是从Enum继承而来，而是 a static method that is added by the compiler
+
+Test[] enumConstants = Test.class.getEnumConstants();
+
+
+
+**EnumSet**
+
+内部是一个64bits的long，通过bit vector储存ordinal的方式保存一个Enum类中的元素
+
+主要用来作为bit flags使用
+
+
+
+**EnumMap**
+
+本身是一个array，下标是元素在Enum类中的下标
+
+ use EnumMaps for enum-based lookups
+
+
+
+**constant-specific method**
+
+用静态内部类的形式定义每个枚举
+
+```java
+public enum Test {
+
+    GOOD_INFO("nice"),BAD_INFO("no!"),
+    NOT_EXIST_INFO{
+        @Override
+        String getInfo() {
+            throw new IllegalArgumentException("INFO NOT EXIST");
+        }
+    };
+
+    String info;
+    Test(){}
+    Test(String info) {
+        this.info = info;
+    }
+    String getInfo(){
+        return info;
+    }
+}
+```
+
+
+
+Java 1.0中有一个非常不好的混淆的选择，就是定义了一个Enumeration接口，负责将元素从容器中枚举出来。现在被矫枉过来，大家也都会选择使用Iterator遍历容器元素了，但是为了兼容，这个接口也不能被随便删除...
+
+
+
+# Annotations
+
+为了追随“metadata置入source-code”的潮流，Java在Java 5中引入的注解
+
+声明注解类 + 创建注解处理器，使用反射来处理注解
+
+注解类无法使用extends关键字来继承
+
+
+
+**声明**
+
+一个注解类上需要/可以指定的元注解：
+
+- Target注解目标（类，方法，属性）
+- Retention注解可用阶段（编译前，编译后，运行时）
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Test {}
+```
+
+
+
+**注解类成员**
+
+允许使用的成员类型：基础数据类型，String，Class，enums，注解类，以上所有的Arrays
+
+基本类型之外的成员不允许为null，没有default value的成员必须在使用是赋值！作者解释说，这么做是为了让注解解释器更好写，不用判断null。
+
+String成员经常需要我们给一个空值 default "" 作为默认值
+
+
+
+**javac**
+
+使用编译时处理器来处理注解（继承了AbstractProcessor的自定义Processor）
+
+javac -processor annotations.simplest.SimpleProcessor SimpleTest.java
+
+
+
+p1132
 
