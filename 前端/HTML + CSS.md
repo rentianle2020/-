@@ -211,7 +211,6 @@ h3{
     animation-direction: alternate; */
 
     animation: red-to-black 4s linear 0s 2 alternate-reverse;
-
 }
 ```
 

@@ -122,7 +122,7 @@ JSON Web Token
 
 
 
-# Laurentiu Spilca
+# Laurentiu Spilca讲解
 
 Spring Security主要架构
 
@@ -314,7 +314,7 @@ R得去找A问一下token的真实性（调用一个A的查询token endpoint）
 
 non-opaque token：JWT（JSON Web Token），通过basic64加密后的JSON字符串
 
-为了让JSON编程一个更短的token，can be decoded into something meaningful
+为了让JSON变成一个更短的token，can be decoded into something meaningful
 
 
 

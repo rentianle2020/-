@@ -76,11 +76,9 @@ private function的封装不能同时被两个不同的actor调用，导致其�
 
 #### OCP: The Open-Closed Principle
 
-A software artifact should be open for extension but closed for modification
+closed to modification, open for extension
 
-如果想让B模块的改动不影响A模块，就让B模块依赖于A模块（对外提供的接口，且A模块也依赖于该接口）
-
-使用接口，让不同模块之间通过接口连接，改变依赖方向，解耦！
+对于单个class而言，可以在不改动它代码的情况下，通过更改依赖实现类来完成extension。
 
 
 
