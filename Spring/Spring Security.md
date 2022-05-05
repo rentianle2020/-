@@ -126,7 +126,7 @@ JSON Web Token
 
 Spring Security主要架构
 
-<img src="C:/Users/%E4%B9%90%E4%B9%90%E5%A4%A7%E5%93%A5%E5%93%A5/Desktop/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring/assets/image-20210917161000188-1631866202156.png" alt="image-20210917161000188" style="zoom:50%;" />	
+<img src="D:\桌面\学习笔记\Spring\assets/image-20210917161000188-1631866202156.png" alt="image-20210917161000188" style="zoom:50%;" />	
 
 UserDetailService通过username拿到UserDetail信息返回
 
@@ -154,7 +154,7 @@ BCryptPasswordEncoder/ScryptPasswordEncoder/Pbkdf2PasswordEncoder
 
 
 
-![image-20210917163648060](C:/Users/%E4%B9%90%E4%B9%90%E5%A4%A7%E5%93%A5%E5%93%A5/Desktop/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring/assets/image-20210917163648060.png)
+![image-20210917163648060](https://cdn.jsdelivr.net/gh/rentianle2020/Image/20220419144938.png)
 
 
 
@@ -302,7 +302,7 @@ Implicit Grant Type就是这样，直接拿token
 
 authorization_code情况下，攻击者还要证明他的client : secret
 
-<img src="C:/Users/%E4%B9%90%E4%B9%90%E5%A4%A7%E5%93%A5%E5%93%A5/Desktop/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Spring/assets/image-20210924174545187.png" alt="image-20210924174545187" style="zoom:50%;" />	
+<img src="D:\桌面\学习笔记\Spring/assets/image-20210924174545187.png" alt="image-20210924174545187" style="zoom:50%;" />	
 
 请求头中：key：Authorization  value：Bearer xxx(access token)
 
@@ -357,3 +357,10 @@ Resource Server：可以拿着public key，也可以在验证的时候找Auth Se
 我们不需要自己搭建RS或者AS
 
 只需要注册一个Client，想AS要token，找RS要资源即可。
+
+
+
+1. https://github.com/login/oauth/authorize?client_id=225c88b2a8223c2326f8
+
+https://github.com/login/oauth/access_token?client_id=225c88b2a8223c2326f8&client_secret=c0279b7b8ab4e8913d219fbf6808c5ae0d5ac5a7&code=5a5c27099af07e1d698c
+

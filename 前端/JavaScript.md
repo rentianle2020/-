@@ -315,4 +315,3 @@ The `await` operator is used to wait for a [`Promise`](https://developer.mozilla
 It can only be used inside an [`async function`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) within regular JavaScript code
 
 并使用try catch来handle error
-

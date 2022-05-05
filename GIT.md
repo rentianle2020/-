@@ -1,6 +1,6 @@
 # GIT
 
-
+![enter image description here](https://i.stack.imgur.com/qRAte.jpg)	
 
 ### 本地仓库相关
 
@@ -16,19 +16,29 @@
 
 
 
-`git log/reflog`：查看过去的提交
+`git log`：查看之前的所有历史版本
 
-`git reset 哈希值`：回到之前的某个提交，不加哈希值就直接reset最近一次add
+`git reflog`：查看HEAD指针的历史记录
+
+`git reset 哈希值`：回到之前/之后的某个提交
+
+`git restore`：删除工作区的修改，回滚到暂存区/最近一次提交的版本
+
+`git restore --staged`：删除暂存区内容
 
 
+
+git checkout起始就是控制HEAD指针的指向
 
 `git checkout 分支`：切换到指定分支
 
 `git checkout -b 分支`：新建分支，并切换到该分支
 
-`git branch`：查看本地分支，如果后边加上分支名，为新建分支
+`git branch`：查看本地分支，如果后边加上分支名，为新建分支，-d删除分支
 
 `git merge 分支`：将指定分支合并到当前分支
+
+> 如果开一个dev分支，然后加一点东西，然后checkout到master，merge dev，默认直接Fast-forward指针合并，将master指针指向dev，省的duplication
 
 https://www.atlassian.com/git/tutorials/using-branches
 

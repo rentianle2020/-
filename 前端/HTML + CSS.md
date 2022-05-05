@@ -214,3 +214,193 @@ h3{
 }
 ```
 
+
+
+# Tailwind CSS
+
+### 大小单位
+
+1 rem = document base font 16px = 4 in Tailwind
+
+ex: 20px = 5 in Tailwind
+
+
+
+### 背景
+
+从左到右渐变
+
+```css
+<div className='bg-gradient-to-r from-purple-900 to-purple-600'> </div>
+```
+
+
+
+### 图片
+
+让card变成圆角，多余的图片hidden
+
+```css
+<div calssName='rounded-lg overflow-hidden'>
+	<img src='' />
+</div>
+```
+
+
+
+### 文字
+
+文字大小，粗细，颜色，位置，字体
+
+```css
+<p className='text-4xl font-bold text-gray-900 text-center font-sans'> </p>
+```
+
+
+
+字间距（单位em），行间距
+
+```css
+<p className='tracking-tight leading-relaxed'> </p>
+```
+
+
+
+斜字体，下划线，大写
+
+```css
+<p className='italic underline uppercase'> </p>
+```
+
+
+
+line-clamp插件，给文字确定行数，多余的用省略号代替“...”
+
+(如果插件安装后compile报错，就删掉node_modules重新npm install一下)
+
+```css
+<p className='line-clamp-3'>xxxxxxxx</p>
+```
+
+
+
+### Display
+
+**block, flex, hidden**
+
+inline, inline-block
+
+
+
+### Flexbox
+
+控制元素在main axis & cross axis的定位
+
+如果item-center不管用，说明整个div的height不够
+
+```css
+<div className='flex justify-center items-center'></div>
+```
+
+
+
+确定card大小后，再剧中
+
+```css
+<div className="flex max-w-3xl mx-auto"> </div>
+```
+
+
+
+flexbox + margin可以让push element left/right/top/bottom/center
+
+
+
+flexbasis：flex col的时候用来设置高度，flex row的时候用来设置宽度；响应式很好用！
+
+
+
+### 边框border
+
+大小（border = 1px），颜色，风格，半径
+
+```css
+<div className="border-t-2 border-red-900 border-solid rounded-tr-lg"> </div>
+```
+
+
+
+### 定位
+
+left是对于父组件的size，transform是对于本组件的size
+
+如果父组件1000px，子组件100px，他的起始位置就是450，结束位置就是550，达到剧中效果！
+
+```css
+<div className="absolute w-4/5 text-center left-1/2 -translate-x-1/2"></div>
+```
+
+
+
+### Input
+
+```css
+<input id="full_name" placeholder="Enter your full name" class="mt-2 shadow border rounded-lg px-3 py-2 text-gray-700 placeholder-indigo-300 focus:bg-blue-100 ">
+```
+
+
+
+### DarkMode
+
+https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
+
+If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `class` strategy instead of the `media` strategy:
+
+```javascript
+//tailwind.config.js
+module.exports = {
+  darkMode: 'class',
+    //...
+}
+```
+
+
+
+```react
+//depends on父标签的className="dark" 
+<nav className="dark">
+    <div className="bg-white dark:bg-black">
+</nav>
+```
+
+
+
+### Grid
+
+根据index给不同grid-element不同的span
+
+添加auto-fit：https://gist.github.com/iamazik/5aa934513388a6e48f44e63648a261d8
+
+```css
+padding: 10px;
+display: grid;
+grid-gap: 2px;
+/* 控制row高度 */
+grid-auto-rows: 100px;
+/* 控制col的min和max，同时不让每行有确定的格子数，达到responsive design */
+grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+/* 让后边的小图可以前移来填补空缺 */
+grid-auto-flow: dense;
+```
+
+
+
+### 其他
+
+opacity-0，shadow-lg，cursor-pointer，select-none，sr-only给视觉障碍者的screen reader only
+
+
+
+### SVG
+
+https://heroicons.com/

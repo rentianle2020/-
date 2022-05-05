@@ -1234,5 +1234,260 @@ javac -processor annotations.simplest.SimpleProcessor SimpleTest.java
 
 
 
-p1132
+# Concurrent Programming
 
+
+
+### **并发&同步的完整定义**
+
+**Concurrency**
+
+Accomplishing more than one task at the same time. One task doesn’t need to
+
+complete before you start working on other tasks. Concurrency solves problems
+
+where *blocking* occurs—when a task can’t progress further until something
+
+outside its control changes. The most common example is I/O, where a task
+
+must wait for some input (in which case it is said to be *blocked*). A problem like
+
+this is said to be *I/O bound*.
+
+**Parallelism**
+
+Accomplishing more than one task *in multiple places* at the same time. This
+
+solves so-called *compute-bound* problems, where a program can run faster
+
+if you split it into multiple parts and run those different parts on different
+
+processors.
+
+
+
+### 什么时候使用多线程
+
+1. 线程可能会block，导致无法继续处理其他任务
+2. *event-driven programming*，处理events时不能让用户界面死机
+
+作者的观点：能不要用就不用，除非程序速度受限。有时你以为threaded-safe，很可能时broken的。但你依然需要去学习并理解，因为我们日常使用的web-server都是多线程的。
+
+ Java will never be a language designed for concurrency, but simply a language that allows it.
+
+
+
+### **parallel()**
+
+stream中使用
+
+1. 将data split为多个部分同步处理
+2. 将结果merge
+
+**什么时候使用？**
+
+如果可以用primitive遍历，会利用Memory Locality。如果用对象指针，就慢了。
+
+默认还是用普通stream()，除非有性能需要。
+
+
+
+数组是最好的同步执行容器，它既可以利用locality，又可以轻易的split
+
+
+
+### 多线程
+
+Runnable对象：交给ExecutorService来execute()
+
+Callable对象：线程结束返回Future对象，交给ExecutorService来invoke()
+
+
+
+Future：通过get()阻塞获取返回值，感觉像是js的await
+
+
+
+- SingleThreadExe'cutor：单线程运行tasks，线程安全
+- CachedThreadPool：线程池同步运行tasks
+
+
+
+race condition：多个task试着改变同一个变量值，最好的方法就是share nothing
+
+
+
+**结束线程**
+
+interrupt一个运行线程是错误的模式，catch InterruptedException仅仅为了兼容之前的设计。
+
+
+
+ The best approach to task termination is to set a flag that the task periodically checks.
+
+```java
+//自己设置一个running，给一个quit()方法结束掉自己
+private AtomicBoolean running = new AtomicBoolean(true);
+
+public void quit() {
+    running.set(false); 
+}
+
+@Override public void run() {
+    while(running.get()) // [1]
+        Thread.sleep(1000);
+    System.out.print(id + " "); // [2]
+}
+
+public static void main(String[] args) {
+    ExecutorService exec = Executors.newCachedThreadPool();
+    List<Test> tasks =
+            IntStream.range(1, 150)
+                    .mapToObj(Test::new)
+                    .peek(exec::execute)
+                    .collect(Collectors.toList());
+    tasks.forEach(Test::quit); //结束
+    exec.shutdown();
+}
+```
+
+
+
+**CompletableFuture**
+
+Future缺陷
+
+- get()会阻塞主线程，如果多个Runnable同时运行，我们get()哪一个来确保任务完成？而第一个get()的也不能确保是最先完成的（有可能其他任务都完成了，主线程还在阻塞等待第一个任务）
+- 不支持链式任务执行，必须get()拿到结果，再把结果包装成下一个任务，再get()
+
+我们想要的
+
+```java
+int main(){
+    for(i in n){ //同时运行多个线程
+    	Run the task;
+    	Once done, run its dependent task;
+    	Once done, run next depentdent task; //每个线程在完成上一步后，链式调用下一步
+    	...
+	}
+
+	//Don't bother main Thread
+}
+```
+
+
+
+CompletableFuture是java8引入的更强力的Future，它实现了Future接口，提供了更全面的功能
+
+1. 传入对象或初始方法，开启新的线程
+2. 再该线程上，通过thenApply等方法执行方法
+3. 可以在不干扰main和其他线程的情况下，链式调用thenApply等方法
+
+thenApply() applies a Function that takes an input and produces an output
+
+
+
+**BlockingQueue**
+
+blocks(waits) if you call take() and the queue is empty
+
+
+
+**死锁**
+
+写一个哲学家问题
+
+死锁的4个必须满足的条件
+
+- 对不可共享资源的争夺（筷子）
+- 手里拿着资源，同时请求别人手里的资源（拿一只筷子，需求另一只）
+- 不能强行掠夺资源（哲学家都很礼貌）
+- 出现死循环（每个哲学家都拿着一只筷子，等着另一只）
+
+
+
+> Parallel streams and CompletableFutures are the most well-developed techniques
+>
+> in the Java concurrency toolbox. You should always choose one of these first. The
+>
+> parallel stream approach is most appropriate when a problem is *embarrassingly*
+>
+> *parallel*, that is, when it is trivially easy to break your data into identical, easy-to
+>
+> process pieces (when doing this yourself you must roll up your sleeves and delve
+>
+> into the Spliterator documentation). CompletableFutures work best when the
+>
+> pieces of *work* are distinct. CompletableFuture seems more task-oriented than data
+>
+> oriented
+
+
+
+### Low-Level Concurrency
+
+Thread程序员自己控制 -> Executor交给线程池控制 -> CompletableFuture自带线程池和更多的机制
+
+
+
+**创建Thread**
+
+JVM为其分配空间（线程私有的program counter、stack1、stack2 for native code, thread-local, JVM通过内部状态管理Thread）
+
+将Thread注册到OS，以获得CPU时间片。
+
+
+
+**最佳线程个数**
+
+Runtime.getRuntime().availableProcessors() 看一下最多运行线程数量
+
+我的电脑，8核，共16个hyperthreads逻辑处理器（基于CPU快速context switching的硬件技术，在不增加处理能力的情况下，能将1个处理器当2个用）
+
+
+
+**捕获异常**
+
+继承UncaughtExceptionHandler接口，设置默认捕获类Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
+
+CompletableFuture可以更简单优雅的捕获异常！
+
+
+
+# synchronized
+
+多个Threads共享同一个对象状态，对于对象状态的更改会导致互相影响，也就是“非线程安全”。
+
+
+
+**每个对象自带一个锁（也叫monitor）**，使用synchronized给方法上锁（这也是为什么我们需要将变量作为private，通过方法访问），其他Thread则需要等待锁释放。
+
+
+
+同一个Thread可以对一个对象多次上锁，也叫”重入“。JVM会记录上锁次数，从0开始，上锁++，释放--，直到归0则视为彻底释放锁。
+
+
+
+**每个Class也自带一个锁（对于Class对象）**，使用synchronized给静态方法上锁
+
+
+
+什么使用使用synchronized？当你需要更改一个变量，该变量需要被另一个线程读取时，或反之亦然。
+
+
+
+### volatile
+
+Java中最难的关键字，可以在现代Java中避免使用；如果见到，保持怀疑。
+
+
+
+**使用场景**
+
+1. Word Tearing
+
+   在32位操作系统上(64位也可能)，当数据类型为64bits（long & double），会分解为2个32bits分别写入，所以可能导致读写不一致。刚写了一般，上下文切换，另一个Thread读到错误的输入。
+
+
+
+1628

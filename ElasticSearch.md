@@ -44,7 +44,7 @@ By default, each index in Elasticsearch is allocated 5 primary shards and 1 repl
 https://www.elastic.co/guide/en/elasticsearch/reference/7.5/docker.html
 
 ```sh
-docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx128m" -d elasticsearch:7.5.2
+docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx128m" --name elasticsearch -d elasticsearch:7.5.2
 ```
 
 

@@ -94,7 +94,7 @@ private String id
 @Enumerated(EnumType.STRING)
 ```
 
-x	
+
 
 **日期映射**
 
