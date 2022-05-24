@@ -685,7 +685,7 @@ Stream.of()
 
 Collection对象，stream()
 
-range(10,20)生成一个10-20的IntStream
+IntStream.range(10,20)生成一个10-20的IntStream
 
 Stream<T> stream = Stream.generate(Supplier<T>) 如Stream.generate(() -> new Person())
 
@@ -747,11 +747,7 @@ count(), max(Comparator), min(Comparator) 返回信息，如果是算数的，�
 
 repeat(3,System.out.println("repeat 3 times"))
 
-flatmap()和map()的区别，flatmap可以返回0个或多个value通过往新的stream中添加value
-
-map如果返回Stream.of(i,i+1,i+1)就真的是返回一个Stream对象
-
-而flatmap返回Stream.of(i,i+1)是会将这两个值添加到Stream，返回Stream.empty()就是返回0个值
+flatmap()和map()的区别，flatmap可以返回0个或多个value,而map是1对1的
 
 
 
@@ -1486,8 +1482,79 @@ Java中最难的关键字，可以在现代Java中避免使用；如果见到，
 
 1. Word Tearing
 
-   在32位操作系统上(64位也可能)，当数据类型为64bits（long & double），会分解为2个32bits分别写入，所以可能导致读写不一致。刚写了一般，上下文切换，另一个Thread读到错误的输入。
+   在32位操作系统上(64位也可能)，当数据类型为64bits（long & double），会分解为2个32bits分别写入，所以可能导致读写不一致。写了一半时执行上下文切换，另一个Thread读到错误结果。
+   
+2. Visibility
+
+   每个线程有独立的local cache，加快变量访问速度；但Java也需要从main memory中读取并刷新cache中的数据（cache coherence）
+
+   如果一个field被标注为volatile，那么对该变量的读写都是直接从main memory中的
+
+   **使用场景**
+
+   - 多线程访问一个field
+   - 至少有一个写操作
+   - 避免使用synchronization
+
+   https://stackoverflow.com/a/54592753
+
+如果一个变量被synchronized methods包围（或者它本身是来自java.util.concurrent.atomic类），那么它会自动flushing to main memory
 
 
 
-1628
+*happens before* guarantee：被修饰volatile的field，保证了对它的读写会按照代码顺序执行，其他可能会被reordering。
+
+> 作者建议
+>
+> volatile的使用场景，基本就是代替synchronization来达成thread safe，更少的cost
+>
+> 一般情况就不建议实用了，直接将这些field用atomic类代替
+
+
+
+”Atomic operations do not need synchronization“是不正确的，使用固有的原子操作非常危险，除非你可以“自己为现代微处理器写一个高性能JVM”的多线程专家，否则尽量使用上锁/提供的线程安全的数据结构
+
+
+
+**Atomic Classes**
+
+Java 5推出的AtomicInteger, AtomicLong, AtomicReference...
+
+提供原子的update，非常快，无锁，利用了现代处理器machine-level的原子性（CAS compareAndSwap)
+
+
+
+**synchronized block**
+
+```java
+synchronized(syncObject) {
+	// This code can be accessed
+	// by only one task at a time
+}
+```
+
+可以不锁整个方法，而是让thread-safe的部分先执行，到了需要的部分再上锁。
+
+
+
+**Lock**
+
+仅特殊情况使用，使用Lock对象上锁&解锁；一定要在try中返回 & 在finally中unlock()
+
+```java
+private Lock lock = new ReentrantLock();
+
+    @Override
+    public int next() {
+        lock.lock();
+        try {
+            ++currentEvenValue;
+            new Nap(0.01); // Cause failure faster
+            ++currentEvenValue;
+            return currentEvenValue;
+        } finally {
+            lock.unlock();
+        }
+    }
+```
+
