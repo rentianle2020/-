@@ -1,31 +1,32 @@
 # On Java 8
 
+在Java中，一切皆对象。
+
 Requiring that everything be an object (especially all the way down to the lowest level) is a design mistake, but banning objects altogether seems equally draconian.
 
 
 
-## OOP
-
 OOP describes the problem in terms of the problem, rather than in terms of the computer where the solution will run.
 
-
-
-So, although what we really do in object-oriented programming is create new data types, virtually all object-oriented programming languages use the “class” keyword. When you see the word “type” think “class” and vice versa.
+通过对象之间的方法调用来解释问题，而不是机器的语言
 
 
 
-**an excellent way to think about objects is as “service providers.”**
+### 什么是对象？
+
+**An object has state, behavior and identity**
+
+每个对象有属性，方法，和它独立的存储地址。
+
+
+
+**每个对象都有Interface**
+
+object == “service providers.”
 
 Interface定义Object提供的服务
 
 Implementation提供服务的具体实现方法
-
-
-
-理解为service provider带来的好处
-
-- 从程序设计的角度：Improve Cohesion，elements of a module/class fit together well 让类中的元素紧密的结合在一起（each object does one thing well, but doesn’t try to do too much）
-- 容易理解，方便复用
 
 
 
@@ -95,39 +96,43 @@ Exception handling existed before object-oriented languages. 所以并不是OOP�
 
 ## Objects Everywhere
 
-Use reference to manipulate Object (使用遥控器来控制电视)
+Java基于C++，是纯粹的面向对象语言，而C++由于向前兼容C，所以属于混合型语言。
 
 
 
-作用域：每个reference会在作用域执行完毕后被销毁，然而其指向的对象还会保留在heap中等待GC。
+创建对象：一切对象都需要new出来。
+
+操作对象：Use reference to manipulate Object (使用遥控器来控制电视)
 
 
 
- When you say something is static, it means the field or method is not tied to any particular object instance. Even if you’ve never created an object of that class, you can call a static method or access a static field. With ordinary, non-static fields and methods, you must create an object and use that object to access the field or method, because non-static fields and methods must target a particular object.
+**永远不需要手动destroy object**
 
-
-
-java.lang is implicitly included in every Java code file, these classes are automatically available
-
-
-
-Java Code Conventions: 类名UpperCamelCase，属性和方法lowerCamelCase
+reference会在作用域执行完毕后被销毁，其指向的object会残留在heap中等待GC。
 
 
 
 ## Operators
 
-函数传参，使用=给形参复制：基本数据类型直接复制值，对象类型则复制reference地址
+**赋值**
+
+基本数据类型直接复制值，对象类型则复制reference地址
 
 
 
-自动包装，Integer i = 127，底层调用了Integer.valueOf(127); 先去找cache
+**自动包装**
+
+Integer i = 127，底层调用了Integer.valueOf(127); 先去找cache
 
 
 
-The reason for short-circuiting, in fact, is that you can get a potential performance increase if all the parts of a logical expression do not need evaluation.
+**短路**
+
+使用||和&&短路判断，以提高性能
 
 
+
+**数字**
 
 0b10 --> binary 3
 
@@ -143,13 +148,7 @@ e并不指代常数，而是代表10 to the power of。1e2 = 1 * 10^2 = 100.0 (�
 
 
 
-基本数据类型转换，如果没有精度损失的可能性，则自动转换。
-
-casting to a smaller type，需要强转。
-
-
-
-float转int会自动将小数点抹去，不四舍五入
+**数据运算**
 
 char/byte/short/int混合运算，计算前都自动转成int，结果也是int
 
@@ -161,23 +160,15 @@ int和long，结果long
 
 ## Control Flow
 
-Java uses all of C’s execution control statements, but Java doesn’t allow you to use a number as a boolean
+Java使用了C的控制流程，但是不允许使用1/0代表true/false
 
 
 
-For循环可以用`,`声明多个变量
+**label**
 
+goto在Java中作为保留关键字，但是并不能使用
 
-
-for, while --> 循环控制（有条件）
-
-return, break, continue --> unconditional branching 无条件分支
-
-
-
-Although goto is a reserved word in Java, it is not used in the language—Java has no goto.
-
-还有一种奇怪的语法，使用了和goto异曲同工，使用label标注一个循环，然后可以通过break和continue控制这个循环
+Java中使用label实现相似功能，声明label，然后可以通过break和continue去到指定的label
 
 ```java
 public static void main(String[] args) {
@@ -194,9 +185,9 @@ public static void main(String[] args) {
 //output 0 1
 ```
 
-It’s important to remember that the only reason to use labels in Java is when you have nested loops and you must break or continue through more than one nested level.
 
 
+**switch**
 
 Switch case: Java 7之前只支持char or int，现在则支持char, byte, short, int, Character, Byte, Short, Integer, String, or an **enum**
 

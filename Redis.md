@@ -1,131 +1,225 @@
-# Redis
-
 Remote Dictionary Server（远程字典服务器）
 
 完全开源免费，用C语言编写，遵守BSD协议
 
 
 
-**主要特点**
+# 第一章 数据结构&对象
 
-- 数据结构存储 data structure store
-- 原子操作 atomic operations
-- 内存数据集 in-memory dataset
+### sds 动态字符串
 
-
-
-**其他功能**
-
-- 事务
-
-- 持久化
-
-- Sentinel 自动故障转移，提高可用性
-
-- Cluster 集群
-
-- Pipline 管道
+- int len 长度
+- int free 空闲空间
+- char buf[] 字符数组，以\0结尾
 
 
 
-## 数据类型
+**与C字符串的区别**
 
-Redis is not a *plain* key-value store, it is actually a *data structures server*, supporting different kinds of values. 
-
-What this means is that, while in traditional key-value stores you associate string keys to string values, in Redis the value is not limited to a simple string, but can also hold more complex data structures. 
-
-
-
-#### **Redis keys**
-
-binary safe，可以使用序列作为key，从String、到JPEG file、甚至空字符串都可以作为合法key value
-
-- key不要太长，从内存的角度，或者从key值对比的角度（哈希冲突，equals判断的时候要把key串里的每个char拿出来对比嘛！）
-
-- key也不要太短，可读性会很差
-
-- 尽量严格根据格式命名，比如user:1000，object-type:id
-
-  > Dots or dashes are often used for multi-word fields
-
-- key size最大512MB
-
-**指令**
-
-EXISTS、DEL、TTL、PTTL
-
-PEXPIRE、EXPIRE：过期时间始终以毫秒级别计算，过期时间会以unix时间戳的形式被持久化到磁盘
-
-PERSIST：移除过期时间，持久化key
-
-FLUSHDB、FLUSHALL：清空当前库、清空所有16个库
+- O(1)获取长度
+- 字符创建/扩容时，空间与分配（需要15字节，额外分配15free）
+- 字符串trim时，惰性空间释放
+- 二进制安全（可以任意保存空字符）
+- 因为以\0结尾，可以使用部分C语言<string.h>中的函数
 
 
 
-#### **Strings**
+### linkedlist 双端链表
 
-最简单的数据类型，也是Memcached唯一的数据类型。
+- listNode *head
+- listNode *tail
+- long len：节点数量
+- 节点复制函数，节点释放拿书，节点值对比函数
 
-**指令**
-
-SET、GET、INCR、INCRBY、DECR、DECRBY、MSET、MGET
-
-GETSET：set new value，return old value
-
+listNode：prev，next，value
 
 
-#### Lists
 
-通过链表实现
+### ziplist 压缩列表
 
-优势：头部和尾部O(1)级别的快速增删
+当含有少量列表项，且每项都是小整数|短字符串时，为了节约内存，使用ziplist(压缩列表)作为底层实现。
 
-劣势：通过下标查询的复杂度是O(n)
+优势：节约内存；存储在连续的地址中，更好的利用缓存。
 
-**指令**
+![img](https://res.weread.qq.com/wrepub/epub_622000_68)
 
-LPUSH、RPUSH：可以同时添加多个元素，如果key不存在则自动创建
+- int bytes：列表总长度
+- int tail：列表尾部偏移量（头部地址 + tail = 尾部地址）
+- int len：节点个数
+- *entry
+- int lend：末尾标记符
 
-RPOP、LPOP：元素出队并返回，如果key中没有元素了则自动删除
+entry
 
-LRANGE：0代表第一个元素，-1代表最后一个元素，-2代表倒数第二个...
+- previous_entry_length：前一个节点的长度（根据前一个节点的长度，占1个或5个字节）
+- encoding：00001011 -> "hello world"，高两位00表示字符数组，01011表示长度位11
+- content
 
-LTRIM：先PUSH再TRIM，剔除老数据，可以保证拿到最新的N个数据，
 
-```ruby
-LPUSH mylist <some element>
-LTRIM mylist 0 999
-```
 
-BRPOP、BLPOP：Block POP
+**连锁更新**
 
-> 如果消费者没有拿到数据，过段时间会再次从客户端发送请求；这样不好，制造无效访问，而且不能第一时间获得生产的元素；
+因为previous_entry_length不固定，添加或者删除元素，可能导致连锁更新，出现几率很小。
+
+![img](https://res.weread.qq.com/wrepub/epub_622000_83)
+
+
+
+### dict 字典
+
+- dictType *type：包含了key比较函数等信息...
+- void *privdata：私有数据
+- dictht ht[2]：两个哈希表，ht[1]只会在对ht[0] rehash时使用
+- int rehashidx：标识**渐进式rehash**进度，不在rehash时为-1
+
+dictht哈希表，哈希冲突时采用拉链法
+
+- dictEntry **table：dictEntry的数组指针
+- long size：哈希表大小
+- long sizemask：size - 1，用于计算索引值
+- long used：键值对数量
+
+dictEntiry：key, val, next
+
+
+
+**哈希表扩展**
+
+扩展大小：ht[1]的大小为第一个大于等于ht[0] * 2的质数
+
+负载因子：ht[0].used / ht[0].size
+
+扩展条件：服务器正在执行BGSAVE || BGWRITEAOF ? 负载因子 >= 5 ： 负载因子 >= 1
+
+负载因子小于0.1时收缩
+
+
+
+**渐进式rehash**
+
+rehash不是一次性执行，而是使用rehashidx表示当前rehashing的下标，渐进式进行。
+
+期间，删改查会在ht[0]和ht[1]两个哈希表上进行。
+
+
+
+### intset 整数集合
+
+当集合只包含整数元素时&元素不多时，Redis使用intset(整数集合)作为Set的底层实现；
+
+- int encoding：编码方式 (int16, int32, int64)
+- int length：元素数量
+- int contents[]：元素数组
+
+
+
+**升级**
+
+当新添加的元素比所有元素类型都要长时，扩容元素数组，并将所有元素类型升级到新长度，放置到合适的地址上。
+
+引发升级的元素，要么小于所有元素（放置在开头），要么大于所有元素（添加到结尾）
+
+- 动态升级，提升灵活性
+- 节约内存
+
+
+
+### skipList 跳跃表
+
+- skiplistNode *header, *tail：头尾节点指针
+- long length：节点数量
+- int level：最大节点层数
+
+skiplistNode：
+
+- struct skiplistLevel { skiplistNode *forward, int span 跨度} level[]：Node在不同层中的指针&跨度
+- skiplistNode *backward：用于从后向前遍历时使用
+- double score：分值
+- *obj：成员对象
+
+**每个节点的层高都是1~32之间的随机数**
+
+![](https://res.weread.qq.com/wrepub/epub_622000_53)
+
+
+
+
+
+
+
+### redisObject 对象
+
+- type：类型
+- encoding：编码方式，内部实现方式
+- *ptr：底层数据结构实现的指针
+- int refcount：通过引用计数，实现内存回收
+- int lru：最近访问时间
+
+对于Redis，键总是一个字符串对象，而值可以是STRING，LIST，HASH，SET，ZSET对象
+
+> TYPE key：获取对应value的对象类型
+>
+> OBJECT ENCODING key：获得对应value的底层实现
+>
+> OBJECT REFCOUNT key：获得对应value的引用计数（通过修改redis.h/REDIS_SHARED_INTEGERS，创建共享整数，不支持共享其他数据结构，验证复杂度过高）
+>
+> OBJECT IDLETIME key：上一次访问key距离现在的时长，如果服务器打开maxmemory选项，并且使用lru算法，用于回收内存
+
+
+
+**每种类型对应的编码&底层实现（3.0版本）**
+
+![img](https://res.weread.qq.com/wrepub/epub_622000_89)
+
+
+
+**字符串**
+
+> int & sds两种底层实现
+
+embstr：对于短字符串的优化，一次内存分配，包含redisObject和sds；只读，在执行APPEND指令后转化为raw
+
+![img](https://res.weread.qq.com/wrepub/epub_622000_93)	
+
+SET、GET：RANGE区间，BIT位
+
+STRLEN、APPEND、INCR...
+
+
+
+**列表**
+
+> 3.2之前 ziplist & linkedlist两种底层实现
+>
+> 之后引入quicklist编码类型，使用Quicklist is a linked list of ziplists作为实现
+
+LPUSH、RPUSH、RPOP、LPOP、LLEN
+
+LRANGE：0代表第一个，-1代表最后一个元素
+
+LTRIM：将链表删除TRIM到指定下标范围
+
+BRPOP、BLPOP：阻塞式POP，设置阻塞等待时长timeout
+
+> 如果消费者没有拿到数据，过段时间会再次从客户端发送请求；
 >
 > 堵塞式就是让POP请求排列成LIST，当有了数据，第一时间按照顺序满足LIST中的请求，如果到时还没有数据，再返回NULL
 
-LLEN、LMOVE、BLMOVE
-
-**使用场景**
-
-生产者消费者模型，消息发布
+LMOVE、BLMOVE：从一个LIST POP到另一个LIST
 
 
 
-#### Hashes
+**哈希**
 
-就是普通的HashMap，KV键值对
-
-**指令**
+> ziplist & dict两种底层实现
 
 HSET、HGET、HMSET、HMGET、HINCRBY
 
 
 
-#### Sets
+**集合**
 
-无顺序的Stirng集合
-
-**指令**
+> dict & intset 两种底层实现
 
 SADD，SMEMBERS、SISMEMBER
 
@@ -139,31 +233,13 @@ SCARD：查看元素数量
 
 SRANDMEMBER：随机获取而不POP
 
-**适用场景**
-
-给一个对象打上多个标签，当然也可以给标签附上对象；发牌
-
-```
-> sadd news:1000:tags 1 2 5 77
-(integer) 4
-
-> sadd tag:1:news 1000
-(integer) 1
-> sadd tag:2:news 1000
-(integer) 1
-> sadd tag:5:news 1000
-(integer) 1
-> sadd tag:77:news 1000
-(integer) 1
-```
 
 
+**有序集合**
 
-#### Sorted Sets
+> ziplist & (dict + skiplist) 两种底层实现
 
-根据score进行排序，如果score相同，则按照字典顺序排序。因为set中的元素不能重复，所以总能分出个先后
-
-skipList + hashTable实现，添加&删除O(log(N))维护跳跃表，实现排序。获取O(1)，由HashTable实现
+根据score进行排序，如果score相同，则按成员对象顺序排序。多节点可以包含相同的分数，但是成员对象必须是唯一的。
 
 **指令**
 
@@ -179,7 +255,223 @@ ZREMRANGEBYSCORE：删除区间元素
 
 
 
-#### Bitmaps
+# 第二章 数据库
+
+数据库默认16个数据库
+
+> SELECT n：客户端选择第n个数据库为当前DB
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_123" alt="img" style="zoom:67%;" />	
+
+数据库主要由dict和expires两个字典构成，其中dict字典负责保存键值对，而expires字典则负责保存键的过期时间。
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_132" alt="img" style="zoom:67%;" />	
+
+
+
+**读写key时的维护**
+
+- 根据key是否存在，更新命中hit和不命中miss的次数
+- 更新LRU时间
+- 检查过期
+- 如果有被WATCH，修改后标记为dirty脏数据；对脏键计数器+1，到一定值后会触法持久化
+- 数据库通知功能
+
+
+
+### 键过期
+
+过期信息以到期毫秒时间戳的形式存储在expires字典中
+
+> EXPIRE key time：设置key存活是时长
+>
+> EXPIREAT key unit时间戳：设置key到期时间
+>
+> TTL key：计算key剩余存活时间
+>
+> 前边加P转为毫秒
+
+
+
+**过期删除策略**
+
+- 定时删除：对CPU不友好
+- 惰性删除：对内存不友好
+- 定期删除：折中
+
+Redis使用惰性+定期两种策略
+
+
+
+**RDB**
+
+执行SAVE | BGSAVE生成新的RDB文件时，检查过期，过期的键不会被持久化
+
+> 从服务器会持久化所有键，等主服务器同步时（收到DEL message）再删除过期键
+>
+> <img src="https://res.weread.qq.com/wrepub/epub_622000_139" alt="img" style="zoom:67%;" />
+
+
+
+**AOF**
+
+当过期键被惰性删除或者定期删除之后，程序会向AOF文件追加（append）一条DEL命令，来显式地记录该键已被删除。
+
+执行AOF重写时，和RDB类似，检查过期，过期键不会被持久化。
+
+
+
+**数据库通知**
+
+SUB/PUB
+
+当Redis命令对数据库进行修改之后，服务器会**根据配置**向客户端发送数据库通知
+
+
+
+### RDB持久化
+
+保存数据库中的键值对数据
+
+Redis服务器启动时，若检测到RDB文件，则自动加载（AOF优先）
+
+> SAVE：阻塞Redis服务器，由服务器进程执行保存工作
+>
+> BGSAVE：由子进程执行保存工作
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_144" alt="img" style="zoom: 67%;" />	
+
+
+
+通过save设置多个配置，服务器每100毫秒遍历一次，只要有一个要求满足，则自动执行BGSAVE命令
+
+距离上一次BGSAVE的数据的修改次数，由dirty脏数据计数器统计
+
+```go
+save 900 1 		//900秒内至少对1个数据进行修改
+save 300 10 	//300秒内至少对10个数据进行修改
+save 60 10000 	//60秒内至少对10000个数据进行修改
+```
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_149" alt="img" style="zoom:50%;" />	
+
+
+
+**RDB文件结构**
+
+https://weread.qq.com/web/reader/d35323e0597db0d35bd957bkd2d32c50249d2ddea18fb39
+
+> od -c dump.rdb：通过ASCII编码打印RDB文件
+>
+> cat读不全因为dump.rdb最后一行没有\n（ends in a newline），一般编辑器如vim都会自动帮我们在最后一行末尾添加\n
+>
+> 行为重现
+>
+> ```bash
+> echo -n 'hello world' >> file.txt
+> ```
+
+
+
+### AOF持久化
+
+Append Only File，所有对数据库的修改，以Redis命令的格式保存。
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_178" alt="img" style="zoom:67%;" />	
+
+append -> 写入内存缓冲区（write） -> 文件同步到磁盘（OS提供了fsync和fdatasync两个同步函数）
+
+
+
+**appendfsync决定了同步的时间**
+
+- always：写完立即同步（效率最低）
+- everysec：每秒同步
+- no：同步时间由OS控制
+
+
+
+**AOF文件载入&数据还原**
+
+<img src="https://res.weread.qq.com/wrepub/epub_622000_180" alt="img" style="zoom:50%;" />	
+
+
+
+**AOF文件结构**
+
+> config set appendonly yes
+>
+> config set appendfsync everysec
+>
+> cat appendonly.aof
+
+
+
+**AOF重写**
+
+为了解决AOF文件体积膨胀的问题
+
+重写并不是读取并分析AOF文件再压缩，而是直接读取数据库的键值，使得AOF中没有一条命令是多余的。
+
+```
+SADD num 1
+SADD num 2 3 4
+SREM num 1
+SADD num 1 5
+转换为 SADD num 1 2 3 4 5
+```
+
+
+
+为了防止在执行AOF中命令时，客户端缓冲区溢出，若元素个数超出redis.h/REDIS_AOF_REWRITE_ITEMS_PER_CMD，则拆分为多条命令
+
+
+
+**后台重写**
+
+> BGREWRITEAOF
+
+为了不阻止服务器（父进程），AOF重写程序放到子进程执行。
+
+开启重写程序后，AOF缓冲区继续照常写AOF；直到子进程重写完毕，发送信号，让父进程同步所有AOF重写缓冲区中的内容，并原子的覆盖现有AOF文件。
+
+<img src="assets/epub_622000_183" alt="img" style="zoom:67%;" />	
+
+
+
+### 事件
+
+**文件事件**
+
+socket绑定READADBLE、WRITABLE等事件
+
+1. 多路复用，创建Epoll
+
+2. 客户端请求连接，初始化socket并添加到epoll，初始化socket.sock.wait_queue中给epoll添加事件的回调函数
+
+3. 客户端发送命令请求，epoll_wait()返回READABLE事件，请求处理器执行命令
+
+4. 将WRITABLE事件关联socket，epoll_wait()返回WRITABLE事件，执行套接字写入操作
+
+   <img src="assets/epub_622000_185" alt="img" style="zoom:50%;" />	
+
+
+
+**时间事件**
+
+由id，时间戳，事件处理函数这3个属性组成。
+
+分为定时事件(一次性)和周期性事件
+
+服务器会轮流执行文件事件&时间时间，事件处理过程中不会进行抢占。
+
+服务器在一般情况下只执行serverCron函数一个时间事件，并且这个事件是周期性事件
+
+时间事件的实际处理时间通常会比设定的到达时间晚一些
+
+
+
+# Bitmap
 
 比特表使用了String数据结构，只不过用这个value是一串最长2^32 - 1的0/1
 
@@ -199,7 +491,7 @@ BITPOS：找到第一个有明确0，或者明确1的value的offset
 
 
 
-#### HyperLogLogs
+# HyperLogLog
 
 A HyperLogLog is a probabilistic data structure used in order to count unique things
 

@@ -41,11 +41,7 @@ Your whole machine is a container, each subsystem is  has a hierarchy(tree)
 
 Ex中的数字代表PID
 
-
-
 Each cgroup can visits certain pages and we can set limit on that
-
-
 
 
 

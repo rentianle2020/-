@@ -75,9 +75,11 @@ https://community.atlassian.com/t5/Bitbucket-questions/What-does-the-behind-ahea
 
 
 
-**如果使用了VPN，导致SSL报错？？？**
+**如果使用了代理服务器，报错Failed to connect to github.com port 443: Connection refused**
 
-git config --global http.sslVerify false
+设置一下代理服务器即可
+
+git config --global http.proxy "127.0.0.1:1080"
 
 
 
