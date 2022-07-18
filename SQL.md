@@ -114,7 +114,7 @@ https://leetcode.cn/problems/rearrange-products-table/
 
 ### **LIMIT**
 
-LIMIT 1,1 = LIMIT 1, OFFSET 1（这时LIMIT从下标0开始，LIMIT 1代表从第二个Record开始，连续找OFFSET个）
+LIMIT 5,100 = 从下标5开始（包含），连续找100个
 
 
 
@@ -215,6 +215,25 @@ FROM  cinema
 
 
 
+**ROWS**
+
+简单应用：ROWS 6 PRECEDING：选中当前行+之前的6行；可以配合ORDER BY和SUM()使用
+
+```sql
+当前行 - current row
+之前的行 - preceding
+之后的行 - following
+无界限 - unbounded
+表示从前面的起点 - unbounded preceding
+表示到后面的终点 - unbounded following
+
+取当前行和前五行：ROWS between 5 preceding and current row --共6行
+取当前行和后五行：ROWS between current row and 5 following --共6行
+取前五行和后五行：ROWS between 5 preceding and 5 folowing --共11行
+```
+
+
+
 ### COUNT(expr) 和 SUM(expr)
 
 COUNT(expr)会返回不是null的Records个数，无论expr得到的值是true还是false；所以可以配合IF(COUNT(expr),TRUE,NULL)使用
@@ -224,3 +243,15 @@ SUM(expr)则只会返回expr返回true的Recrods个数
 
 
 可以配合CASE连用，对于每个GROUP中的Records进行一次expr计算，然后得出最终的COUNT或SUM
+
+
+
+### 多字段IN
+
+可以多字段匹配IN，方便实用
+
+```sql
+//存在id相同，日期等于第二天的数据
+(id,date) IN (SELECT id, date + INTERVAL 1 DAY FROM person GROUP BY id)
+```
+
