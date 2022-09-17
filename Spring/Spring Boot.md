@@ -1,10 +1,6 @@
 # SpringBoot
 
-
-
 ### Structuring Your Applications
-
-
 
 **N Tier Architecture**
 
@@ -14,11 +10,7 @@ Service LAYER 业务逻辑
 
 DAO LAYER 访问数据库
 
-
-
 CommandLineRunner类作为启动时使用的类
-
-
 
 ### JSON
 
@@ -38,8 +30,6 @@ Spring没有重复造轮子，而是使用了Jackson依赖来处理JSON字符串
 
 以上两个注解可以放在属性、方法上，如果用lombok@Data了，就放在属性上就好
 
-
-
 ### Restful APIs
 
 GET：request data
@@ -49,8 +39,6 @@ POST：create new resource 非幂等性，每次会造成不同的结果
 PUT：create new update old resource 保证幂等性，发送多少次都是一样的结果
 
 DELETE：delete resource
-
-
 
 **API命名和版本**
 
@@ -66,8 +54,6 @@ best practice when u deprecate（过时）version 1 and goes to version 2
 
 将v1 @Deprecated
 
-
-
 另外：
 
 根据团队的命名惯例，可以叫做api/v1/customers，然后getCustomers方法就直接访问，getCustomer方法需要加上@PathVariable("customerId")
@@ -77,8 +63,6 @@ best practice when u deprecate（过时）version 1 and goes to version 2
 
 
 > *Immutable List* 指的是不可变、线程安全的集合
-
-
 
 ### Validation
 
@@ -99,15 +83,11 @@ best practice when u deprecate（过时）version 1 and goes to version 2
 
 具体调用方法`validateIfApplicable()`
 
-
-
 **更多注解请见**
 
 ```
 package javax.validation.constraints;
 ```
-
-
 
 ### Exception Handling
 
@@ -121,13 +101,9 @@ server:
     include-stacktrace: on_param #请求体中stacktrace:true才会返回，太冗余了
 ```
 
-
-
 **HTTP状态码**
 
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-
-
 
 **异常自定义流程**
 
@@ -147,13 +123,9 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
    返回值构造方法中，传参ExceptionEntity实例，和HttpStatus（响应状态码）
 
-
-
 ### Spring Data
 
 H2 Database：用Java语言实现，超级轻量级数据库(2MB jar file size)，通常使用InMemoery模式来测试数据
-
-
 
 引入spring-boot-database-start和数据库，完成yml配置
 
@@ -173,8 +145,6 @@ spring:
       path: /h2
 ```
 
-
-
 创建Dao层接口，自动被扫描、实现、注入容器
 
 接下来就可以使用他的实现类在Service层完成业务逻辑了！
@@ -187,25 +157,17 @@ public interface CustomerRepository
 }
 ```
 
-
-
 ### Open Feign Rest Client
 
 Feign makes writing java http clients easier
 
 一个超级好用的REST客户端，微服务中互相调用接口使用
 
-
-
 Free fake API for testing：http://jsonplaceholder.typicode.com/
-
-
 
 SpringCloud为分布式项目提供解决方案（各种组件）
 
 将SpringCloud依赖放到父模块的dependency manangement中，子模块引用时可以统一版本号和作用域
-
-
 
 ### Logging
 
@@ -218,8 +180,6 @@ private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.cla
 在配置文件中可以配置Log
 
 > File --> Keymap --> Main Menu --> Code --> Code Completion --> SmartType和输入法切换冲突，切换成Shift + Tab，超级好用！
-
-
 
 ### SpringBoot Actuator and Metrics
 
@@ -234,8 +194,6 @@ private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.cla
 
 引入依赖后自动开放两个uri，health和info，我们访问http://localhost:8080/actuator即可看到
 
-
-
 通过配置文件自定义应用的info
 
 ```yml
@@ -247,8 +205,6 @@ info:
     name: Tyler
     age: 22
 ```
-
-
 
 配置Actuator的终端URI信息
 
@@ -263,8 +219,6 @@ management:
       show-details: always
 ```
 
-
-
 **Micrometer**
 
 引入prometheus依赖，Spring Boot Actuator发现依赖自动配置，在配置中开启endpoint即可
@@ -278,11 +232,7 @@ management:
 
 > Micrometer provides a simple facade over the instrumentation clients for the most popular monitoring systems, allowing you to instrument your JVM-based application code without vendor lock-in. Think SLF4J, but for metrics.
 
-
-
 ### Application Properties and Profiles
-
-
 
 **向属性注入值**
 
@@ -292,19 +242,19 @@ management:
 
 - 推荐：使用@ConfigurationProperties(prefiex = "info")
 
-  支持relaxed binding：maps the Environment property to the bean property name even it is not an exact match. For example, dash-separated environment properties (app-name bound to appName) or capitalized properties as in PORT (bound to port).
+  支持relaxed binding：maps the Environment property to the bean property name even it is not an exact match. For example,
+  dash-separated environment properties (app-name bound to appName) or capitalized properties as in PORT (bound to port)
+  .
 
   支持自动转换：根据metadata中的key对应类中的属性名
 
   type-safe：注入时会自动进行类型转换，而不是像前两种方法只能注入String类型数据；同时还支持使用Vliadation包中的注解对注入的值进行检查
 
-
-
 **Profiles**
 
 在运行jar包时加上参数，Springboot就能自动选择对应尾缀的application-xxx.yml配置文件
 
-![image-20210913212532068](https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210913212543.png)	
+![image-20210913212532068](https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210913212543.png)
 
 application-dev.yaml：开发环境
 
@@ -312,7 +262,7 @@ application-staging.yaml：测试环境
 
 application-prod.yaml：生产环境
 
-​	
+​
 
 ### Testing
 
@@ -320,14 +270,11 @@ Integration Test：程序启动时，测试所有的函数和接口
 
 Diffblue自动生成，或者Shift + Ctrl + T自动生成
 
-
-
 ### Lombok
 
-Project Lombok is a java library that automatically plugs into your editor and build tools, spicing up your java.
-Never write another getter or equals method again, with one annotation your class has a fully featured builder, Automate your logging variables, and much more.
-
-
+Project Lombok is a java library that automatically plugs into your editor and build tools, spicing up your java. Never
+write another getter or equals method again, with one annotation your class has a fully featured builder, Automate your
+logging variables, and much more.
 
 **@Data**
 
@@ -335,13 +282,9 @@ Never write another getter or equals method again, with one annotation your clas
 
 如果所有都是final，就是一个AllArgsConstructor，如果都不是final，就是一个NoArgsConstructor
 
-
-
 **record**
 
 Java15中引入了record，public record pojo(String xxx, Integer xxx){}，自动生成private final属性，构造函数，getter，equals，hashcode，toString
-
-
 
 **原理**
 
@@ -349,15 +292,11 @@ https://stackoverflow.com/questions/6107197/how-does-lombok-work
 
 http://notatube.blogspot.com/2010/12/project-lombok-creating-custom.html
 
-
-
 ## Useful class
 
 ResponseEntity
 
 RestTemplate
-
-
 
 ### **URL & URI**
 
@@ -369,7 +308,7 @@ URL和URI与相对和绝对路径没有任何关系！
 
 > https://www.w3.org/TR/uri-clarification/
 >
-> People who are well-versed in URI matters tend to use "URL" and "URI" in ways that seem to be interchangable. Among these experts, this isn't a problem. But among the Internet community at large, it is. People are not convinced that URI and URL mean the same thing, in documents where they (apparently) do. 
+> People who are well-versed in URI matters tend to use "URL" and "URI" in ways that seem to be interchangable. Among these experts, this isn't a problem. But among the Internet community at large, it is. People are not convinced that URI and URL mean the same thing, in documents where they (apparently) do.
 
 
 

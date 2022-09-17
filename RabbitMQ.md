@@ -167,8 +167,6 @@ String queueName = channel.queueDeclare().getQueue();
 
 **扇出交换机 exchange**
 
-![img](C:/Users/%E4%B9%90%E4%B9%90%E5%A4%A7%E5%93%A5%E5%93%A5/Desktop/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/assets/bindings.png)	
-
 Instead, the producer can only send messages to an *exchange*. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives.
 
 There are a few exchange types available: direct, topic, headers and fanout.
@@ -280,7 +278,7 @@ listener acknowledge
 #      simple:
 #        acknowledge-mode: manual
 #        prefetch: 1
-#      simple & direct是一样的
+#      simple & direct的不同，请见https://docs.spring.io/spring-amqp/reference/html/#choose-container
       direct:
         acknowledge-mode: manual
         prefetch: 1

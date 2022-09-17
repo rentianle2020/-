@@ -29,7 +29,7 @@ Remote Dictionary Server（远程字典服务器）
 - listNode *head
 - listNode *tail
 - long len：节点数量
-- 节点复制函数，节点释放拿书，节点值对比函数
+- 节点复制函数，节点释放函数，节点值对比函数
 
 listNode：prev，next，value
 
@@ -108,8 +108,12 @@ rehash不是一次性执行，而是使用rehashidx表示当前rehashing的下�
 当集合只包含整数元素时&元素不多时，Redis使用intset(整数集合)作为Set的底层实现；
 
 - int encoding：编码方式 (int16, int32, int64)
+
 - int length：元素数量
+
 - int contents[]：元素数组
+
+  <img src="assets/image-20220811172311661.png" alt="image-20220811172311661" style="zoom:80%;" />	
 
 
 
@@ -117,7 +121,7 @@ rehash不是一次性执行，而是使用rehashidx表示当前rehashing的下�
 
 当新添加的元素比所有元素类型都要长时，扩容元素数组，并将所有元素类型升级到新长度，放置到合适的地址上。
 
-引发升级的元素，要么小于所有元素（放置在开头），要么大于所有元素（添加到结尾）
+引发升级的元素，它的值要么小于所有元素（放置在开头），要么大于所有元素（添加到结尾）
 
 - 动态升级，提升灵活性
 - 节约内存
@@ -175,7 +179,7 @@ skiplistNode：
 
 **字符串**
 
-> int & sds两种底层实现
+> int（ASCII编码，"10" -> 49 48 -> 00110001 00110000） & sds两种底层实现
 
 embstr：对于短字符串的优化，一次内存分配，包含redisObject和sds；只读，在执行APPEND指令后转化为raw
 
@@ -295,9 +299,9 @@ ZREMRANGEBYSCORE：删除区间元素
 
 **过期删除策略**
 
-- 定时删除：对CPU不友好
-- 惰性删除：对内存不友好
-- 定期删除：折中
+- 定时删除：设置键过期的同时，设置一个Timer；对CPU不友好
+- 惰性删除：放着过期的不管，直到取键时，再判断是否该删了；对内存不友好
+- 定期删除：每隔一段时间检查一次；折中
 
 Redis使用惰性+定期两种策略
 
@@ -468,6 +472,16 @@ socket绑定READADBLE、WRITABLE等事件
 服务器在一般情况下只执行serverCron函数一个时间事件，并且这个事件是周期性事件
 
 时间事件的实际处理时间通常会比设定的到达时间晚一些
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -805,5 +819,3 @@ public class Test{
 ```
 
 
-
-# 后期可重点关注Sentinel，Replica，面试题

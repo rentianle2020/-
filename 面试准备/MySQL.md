@@ -18,7 +18,7 @@ MySQL 5.5.5 之前，MyISAM 是 MySQL 的默认存储引擎。5.5.5 版本之后
 
 **MyISAM & InnoDB**
 
-- MyISAM不支持表级锁，要锁直接锁整个表，并发不友好
+- MyISAM不支持行级锁，要锁直接锁整个表，并发不友好
 - MyISAM不支持事务，也没有MVCC
 - MyISAM不支持外键
 - MyISAM不支持崩溃恢复，InnoDB有redo log

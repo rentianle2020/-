@@ -76,7 +76,7 @@ https://stackoverflow.com/questions/22358071/differences-between-oracle-jdk-and-
 
 **String constant pool字符串常量池**
 
-- 存在于堆中，用于存储String对象
+- 字符串常量池存在于堆中，用于存储String对象
 - 如果创建已经存在于常量池的String，直接赋值给引用，不再生成新的。
 
 ```java
@@ -97,7 +97,15 @@ System.out.println(s3 == s4); // false
 System.out.println(s1 == s4); //true
 ```
 
-使用new关键字创建的String对象存在于堆中（常量池外），而不会存在于常量池。
+使用new关键字创建的String对象存在于堆中（如果常量池中没有，就额外在常量池中再创建一个String对象）
+
+```java
+public static void main(String[] args) throws IOException {
+    String s1 = new String("abc"); //堆中对象，常量池中指针
+    String s2 = "abc";
+    System.out.println(s2 == s2); //true
+}
+```
 
 https://stackoverflow.com/a/20488205
 
@@ -122,7 +130,7 @@ Throwable
 - Error：程序无法处理的异常，如JVM运行错误，JVM内存不够等...
 - Exception
   - Checked Exception：需要被`catch`或`throws`，否则无法通过编译
-  - Unchecked Exception
+  - Unchecked Exception：RuntimeException and its subclasses are unchecked exceptions.
 
 
 
@@ -134,8 +142,6 @@ Throwable
 2. 执行finally
 3. 返回本地变量中的返回值
 4. 如果finally中return，本地变量就会被改变，try中的return值就会被忽略
-
-
 
 finally语句块中的代码，在线程死亡`System.exit(1)`或者关闭CPU的情况下，都不会被执行。
 
@@ -163,8 +169,6 @@ catch (IOException e) {
 
 
 ### 泛型
-
-
 
 泛型类（new时定义泛型），泛型接口（implement时定义/不定义泛型），泛型方法（调用时定义泛型）
 

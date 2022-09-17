@@ -1,0 +1,14 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+eureka:
+  server:
+    eviction-interval-timer-in-ms: 10000 #定期删除无效服务
+    renewal-percent-threshold: 0.85 #超过85%的服务失效，启动保护机制，不会删除任何一个服务
+  instance:
+    instance-id: ${eureka.instance.hostname}:${spring.application.name}:${server.port}
+    hostname: localhost
+    prefer-ip-address: true #以ip形式展示服务信息
+    lease-renewal-interval-in-seconds: 5 #续约间歇时间

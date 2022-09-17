@@ -4,8 +4,6 @@ Spring项目通常代表使用Spring Framework技术开发的项目
 
 Spring Framework被分成多个模块：核心的配置模型和core container，DI；web应用MVC；持久层；响应式web flex等。
 
-
-
 # Core Technologies
 
 > 官方：IoC is also known as dependency injection (DI)
@@ -14,13 +12,9 @@ Spring Framework被分成多个模块：核心的配置模型和core container�
 
 ![container magic](https://docs.spring.io/spring-framework/docs/current/reference/html/images/container-magic.png)·
 
-
-
 ### Bean扩容点
 
 实现接口，改变Bean的生命周期
-
-
 
 **Aware**
 
@@ -48,15 +42,12 @@ public class Person implements BeanNameAware {
 >
 > 所以，只推荐在基础设施bean中使用（指的应该是Util类等）
 
-
-
 ### **Container Extension Points 容器扩展点**
-
-
 
 **BeanPostProcessor**
 
-If you want to implement some custom logic after the Spring container finishes instantiating, configuring, and initializing a bean, you can plug in one or more custom `BeanPostProcessor` implementations. 
+If you want to implement some custom logic after the Spring container finishes instantiating, configuring, and
+initializing a bean, you can plug in one or more custom `BeanPostProcessor` implementations.
 
 实现了BeanPostProcessor的类，被容器自动扫描并注入，在普通Bean初始化前后回调函数
 
@@ -78,11 +69,10 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 }
 ```
 
-
-
 **BeanFactoryPostProcessor**
 
- the Spring IoC container lets a `BeanFactoryPostProcessor` read the configuration metadata and potentially change it *before* the container instantiates any beans other than `BeanFactoryPostProcessor` instances.
+the Spring IoC container lets a `BeanFactoryPostProcessor` read the configuration metadata and potentially change it *
+before* the container instantiates any beans other than `BeanFactoryPostProcessor` instances.
 
 > 最好也同时实现`Ordered`接口，这样可以设置执行顺序
 >
@@ -104,27 +94,19 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 }
 ```
 
-
-
- **Customizing Instantiation Logic with a `FactoryBean`**
+**Customizing Instantiation Logic with a `FactoryBean`**
 
 实现FactoryBean接口的类，本身是一个bean
 
 可以自定义实例化逻辑，和@Configuration中的@Bean类似
 
-
-
 ### 依赖注入注解
-
-
 
 **@Autowired**
 
 自动注入，默认按照类by Type；可以用在类、属性、构造方法、普通方法上
 
 设置 required = "false"（默认true），这样在无法注入时会直接跳过，不会报错
-
-
 
 **同一个Autowired接口有多个实现类，解决方案**
 
@@ -133,8 +115,6 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 @Qualifier：将注入自动注入的方式更改为按名称by Name
 
 @Resource：与Autowired不同，注入方式默认by Name；该注解只支持用在属性上
-
-
 
 **@Value**
 
@@ -159,13 +139,9 @@ private String mailUsername
 
 > 不如就用spring的
 
-
-
 ### 扫描classpath并完成BeanDefinition注册
 
 使用`@Component` , `@Service`，`@Controller`等，将类变为Stereotyped Classes（定性类）
-
-
 
 在`@Configuration`类上，添加`@ComponentScan（basepackage = “com.tyler”）`
 
@@ -191,15 +167,11 @@ private String mailUsername
 | Initialization method | @PostConstruct方法                                           |
 | Destruction method    | @PreDestroy方法                                              |
 
-
-
 ### Java-based Container Configuration
 
 使用`@Configuration`和`@Bean`注解，将对象注入Spring IoC容器
 
 优势：可以自定义很多逻辑判断，然后决定返回什么bean实例到容器中
-
-
 
 **Lite模式**
 
@@ -211,8 +183,6 @@ private String mailUsername
 
 缺点：配置类内部**不能通过方法调用**来处理依赖，否则**每次生成的都是一个新实例而并非IoC容器内的单例**（但可以通过@Autowire解决，我觉得也不是什么大事）
 
-
-
 **Full模式**
 
 标注有`@Configuration`注解的类被称为full模式的配置类
@@ -221,13 +191,11 @@ private String mailUsername
 
 缺点：需要被CGLIB动态代理（@Configuration(proxyBeanMethods = false) 这样可以变为Lite模式）
 
->  All `@Configuration` classes are subclassed at startup-time with `CGLIB`. In the subclass, the child method checks the container first for any cached (scoped) beans before it calls the parent method and creates a new instance.
+> All `@Configuration` classes are subclassed at startup-time with `CGLIB`. In the subclass, the child method checks the container first for any cached (scoped) beans before it calls the parent method and creates a new instance.
 
 
 
 **选择**：如果配置类下注册的bean有互相依赖，就使用Full模式；如果没有互相依赖的情况，就使用Lite模式
-
-
 
 # IoC
 
@@ -239,8 +207,6 @@ private String mailUsername
 IoC容器instantisates,seembles,and manages the bean object ('s lifecycle)
 
 The configuration metadata that are supplied to the container are used create Bean obejct
-
-
 
 **ApplicationContext宏观周期**
 
@@ -258,25 +224,27 @@ afterProptertiesSet() & 自定义init()：可以打印日志，或者使用已�
 
 ![image-20210909170231362](https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225801.png)
 
-<img src="https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225754.png" alt="enter image description here" style="zoom: 50%;" />	
-
-
+<img src="https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225754.png" alt="enter image description here" style="zoom: 50%;" />
 
 # Dependency Injection
 
 **什么是依赖注入**
 
-The best definition I've found so far is [one by James Shore](http://jamesshore.com/Blog/Dependency-Injection-Demystified.html):
+The best definition I've found so far
+is [one by James Shore](http://jamesshore.com/Blog/Dependency-Injection-Demystified.html):
 
 > "Dependency Injection" is a 25-dollar term for a 5-cent concept. [...] Dependency injection means giving an object its instance variables. [...].
 
 There is [an article by Martin Fowler](http://martinfowler.com/articles/injection.html) that may prove useful, too.
 
-Dependency injection is basically providing the objects that an object needs (its dependencies) instead of having it construct them itself. It's a very useful technique for testing, since it allows dependencies to be mocked or stubbed out.
+Dependency injection is basically providing the objects that an object needs (its dependencies) instead of having it
+construct them itself. It's a very useful technique for testing, since it allows dependencies to be mocked or stubbed
+out.
 
-Dependencies can be injected into objects by many means (such as constructor injection or setter injection). One can even use specialized dependency injection frameworks (e.g. Spring) to do that, but they certainly aren't required. You don't need those frameworks to have dependency injection. Instantiating and passing objects (dependencies) explicitly is just as good an injection as injection by framework.
-
-
+Dependencies can be injected into objects by many means (such as constructor injection or setter injection). One can
+even use specialized dependency injection frameworks (e.g. Spring) to do that, but they certainly aren't required. You
+don't need those frameworks to have dependency injection. Instantiating and passing objects (dependencies) explicitly is
+just as good an injection as injection by framework.
 
 **依赖注入方式**
 
@@ -286,8 +254,6 @@ By Setter method
 
 都可以使用，只不过注入依赖的时机不同而已
 
-
-
 个人更偏向使用Constructor注入
 
 - 依赖更明确
@@ -296,21 +262,13 @@ By Setter method
 
 - 静态变量可以直接使用依赖（静态变量在构造方法后，在setter方法前被初始化）
 
-
-
 # AOP
 
 一种程序结构思想
 
 就像class作为OOP中的组件，AOP思想将aspect作为关键组件
 
-
-
 cross-cutting concern 关注横切点
-
-
-
-
 
 # Spring MVC
 
@@ -320,9 +278,7 @@ Request --> Controller --> Model --> View --> Response
 
 SpringMVC框架让我们使用最少的代码，完成整个业务请求的处理，遵循MVC模式
 
-
-
-<img src="https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225741.png" alt="mvc context hierarchy" style="zoom:67%;" />	
+<img src="https://cdn.jsdelivr.net/gh/rentianle2020/Image/20210909225741.png" alt="mvc context hierarchy" style="zoom:67%;" />
 
 `DispatcherServlet`：基于Servlet，统一接收&返回请求，实际处理委派给各个组件
 
@@ -330,7 +286,7 @@ WebApplicationContext是ApplicationContext的扩展，将各种web-related beans
 
 DispatcherServlet使用这个容器，作为它自己的获取bean的容器（从WebApplicationContext中获取对应的bean来处理请求）
 
-> `DispatcherServlet` expects a `WebApplicationContext` (an extension of a plain `ApplicationContext`) for its own configuration. 
+> `DispatcherServlet` expects a `WebApplicationContext` (an extension of a plain `ApplicationContext`) for its own configuration.
 
 
 

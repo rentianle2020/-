@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="be4ca86b-e4bc-4707-854c-c4cfdd9e32ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Spring/demo/custom-springboot-starter/src/main/java/com/tyler/MyBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/eureka/eureka/EurekaApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/eureka/eureka/EurekaApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/src/main/java/eurekaclientb/demo/EurekaClientBApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client-b/src/test/java/eurekaclientb/demo/EurekaClientBApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/src/main/java/eurekaclient/demo/EurekaClientApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-client/src/test/java/eurekaclient/demo/EurekaClientApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/src/main/java/eurekaserverreplica/demo/EurekaServerReplicaApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server-replica/src/test/java/eurekaserverreplica/demo/EurekaServerReplicaApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/docker/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/docker/run.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/src/main/java/eurekaserver/demo/EurekaServerApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka-server/src/test/java/eurekaserver/demo/DemoApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/src/main/java/com/example/eureka/EurekaApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springcloud/eureka/src/test/java/com/example/eureka/EurekaApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Redis.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Redis.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SQL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../SQL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spring/Spring Boot.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Spring/Spring Boot.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spring/Spring Cloud.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Spring/Spring Cloud.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spring/Spring Data JPA.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Spring/Spring Data JPA.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spring/Spring Framework.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Spring/Spring Framework.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spring/Spring Security.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Spring/Spring Security.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../面试准备/Java基础.md" beforeDir="false" afterPath="$PROJECT_DIR$/../面试准备/Java基础.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../面试准备/Java并发.md" beforeDir="false" afterPath="$PROJECT_DIR$/../面试准备/Java并发.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../面试准备/MySQL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../面试准备/MySQL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../面试准备/计算机网络.md" beforeDir="false" afterPath="$PROJECT_DIR$/../面试准备/计算机网络.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../项目日志.md" beforeDir="false" afterPath="$PROJECT_DIR$/../项目日志.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="2DZMRZ6v3XiV6h2QPcBvZgoxyPQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="EurekaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="eureka" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.eureka.eureka.EurekaApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="be4ca86b-e4bc-4707-854c-c4cfdd9e32ac" name="Default Changelist" comment="" />
+      <created>1660902147297</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1660902147297</updated>
+      <workItem from="1660902148454" duration="3314000" />
+      <workItem from="1661001186033" duration="8607000" />
+      <workItem from="1661147710415" duration="3662000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>

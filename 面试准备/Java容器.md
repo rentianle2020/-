@@ -120,7 +120,7 @@ Java集合有两种Iterators
 
   当check next value时，发现currentModCount != initialModCount，则抛出异常
 
-- Fail Safe（CopyOnWriteArrayList）
+- Fail Safe / **Non-Fail-fast**（CopyOnWriteArrayList）
 
   Iterator内部保存一份copy，对集合的修改不会影响Iterator遍历的对象
 

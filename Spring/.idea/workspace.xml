@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aa870940-e461-4254-be95-2b0e0206ee5b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/demo/custom-springboot-starter/src/main/java/com/tyler/MyBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/main/java/com/example/consumingrest/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/main/java/com/example/restservice/Greeting.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/main/java/com/example/restservice/GreetingController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/src/main/java/com/example/schedulingtasks/ScheduledTasks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SQL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../SQL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Spring Boot.md" beforeDir="false" afterPath="$PROJECT_DIR$/Spring Boot.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Spring Cloud.md" beforeDir="false" afterPath="$PROJECT_DIR$/Spring Cloud.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Spring Data JPA.md" beforeDir="false" afterPath="$PROJECT_DIR$/Spring Data JPA.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Spring Framework.md" beforeDir="false" afterPath="$PROJECT_DIR$/Spring Framework.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Spring Security.md" beforeDir="false" afterPath="$PROJECT_DIR$/Spring Security.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/ConsumingRestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/ConsumingRestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/Quote.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/Quote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/main/java/com/example/consumingrest/Value.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/test/java/com/example/consumingrest/ConsumingRestApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/complete/src/test/java/com/example/consumingrest/ConsumingRestApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/main/java/com/example/consumingrest/ConsumingRestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/main/java/com/example/consumingrest/ConsumingRestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/test/java/com/example/consumingrest/ConsumingRestApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-consuming-rest/initial/src/test/java/com/example/consumingrest/ConsumingRestApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/complete/src/main/java/hello/Greeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/complete/src/main/java/hello/Greeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/complete/src/main/java/hello/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/complete/src/main/java/hello/HelloWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/complete/src/test/java/hello/GreeterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/complete/src/test/java/hello/GreeterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/initial/src/main/java/hello/Greeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/initial/src/main/java/hello/Greeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-maven/initial/src/main/java/hello/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-maven/initial/src/main/java/hello/HelloWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/src/main/java/com/example/messagingredis/MessagingRedisApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/src/main/java/com/example/messagingredis/MessagingRedisApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/complete/src/main/resources/log4j.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/src/main/java/com/example/messagingredis/MessagingRedisApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-messaging-redis/initial/src/main/java/com/example/messagingredis/MessagingRedisApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/src/main/java/com/example/relationaldataaccess/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/src/main/java/com/example/relationaldataaccess/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/complete/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-relational-data-access/initial/src/main/java/com/example/relationaldataaccess/RelationalDataAccessApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/manifest.yml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/manifest.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/main/java/com/example/restservice/Greeting.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/main/java/com/example/restservice/Greeting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/main/java/com/example/restservice/GreetingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/main/java/com/example/restservice/GreetingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/test/java/com/example/restservice/GreetingControllerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/complete/src/test/java/com/example/restservice/GreetingControllerTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/main/java/com/example/restservice/RestServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/main/java/com/example/restservice/RestServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/test/java/com/example/restservice/RestServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-rest-service/initial/src/test/java/com/example/restservice/RestServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/main/java/com/example/schedulingtasks/ScheduledTasks.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/main/java/com/example/schedulingtasks/ScheduledTasks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/main/java/com/example/schedulingtasks/SchedulingTasksApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/main/java/com/example/schedulingtasks/SchedulingTasksApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/test/java/com/example/schedulingtasks/ScheduledTasksTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/test/java/com/example/schedulingtasks/ScheduledTasksTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/test/java/com/example/schedulingtasks/SchedulingTasksApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/complete/src/test/java/com/example/schedulingtasks/SchedulingTasksApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/src/main/java/com/example/schedulingtasks/SchedulingTasksApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/src/main/java/com/example/schedulingtasks/SchedulingTasksApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/src/test/java/com/example/schedulingtasks/SchedulingTasksApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-scheduling-tasks/initial/src/test/java/com/example/schedulingtasks/SchedulingTasksApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/FileUploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/FileUploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/UploadingFilesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/UploadingFilesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/FileSystemStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/FileSystemStorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageException.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageFileNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageFileNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/java/com/example/uploadingfiles/storage/StorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/resources/templates/uploadForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/main/resources/templates/uploadForm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/FileUploadIntegrationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/FileUploadIntegrationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/FileUploadTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/FileUploadTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/storage/FileSystemStorageServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/complete/src/test/java/com/example/uploadingfiles/storage/FileSystemStorageServiceTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/UploadingFilesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/UploadingFilesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/FileSystemStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/FileSystemStorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageException.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageFileNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageFileNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/gs-uploading-files/initial/src/main/java/com/example/uploadingfiles/storage/StorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../面试准备/Java并发.md" beforeDir="false" afterPath="$PROJECT_DIR$/../面试准备/Java并发.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../项目日志.md" beforeDir="false" afterPath="$PROJECT_DIR$/../项目日志.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="userSettingsFile" value="D:\work\maven_work\apache-maven-3.3.9\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2CZlUVcsSIeSgAdBMnFrY2g0PJ0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/JpaExample" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa870940-e461-4254-be95-2b0e0206ee5b" name="Default Changelist" comment="" />
+      <created>1659018005054</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1659018005054</updated>
+      <workItem from="1659018006544" duration="250000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
