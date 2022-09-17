@@ -21,3 +21,5 @@ http://47.104.181.214:8080/manage/
 
 
 ### Maven Jenkins Plugin
+
+ok
